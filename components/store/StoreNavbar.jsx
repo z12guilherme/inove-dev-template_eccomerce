@@ -3,6 +3,11 @@ import Link from "next/link"
 
 const StoreNavbar = () => {
 
+    const handleLogout = () => {
+        localStorage.removeItem('isAdmin')
+        localStorage.removeItem('isSeller')
+        window.location.href = '/'
+    }
 
     return (
         <div className="flex items-center justify-between px-12 py-3 border-b border-slate-200 transition-all">
@@ -14,6 +19,7 @@ const StoreNavbar = () => {
             </Link>
             <div className="flex items-center gap-3">
                 <p>Olá, Vendedor</p>
+                <button onClick={handleLogout} className="text-sm bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">Sair</button>
             </div>
         </div>
     )

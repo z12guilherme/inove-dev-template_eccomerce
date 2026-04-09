@@ -12,7 +12,8 @@ const AdminLayout = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     const fetchIsAdmin = async () => {
-        setIsAdmin(true)
+        const hasAdminAccess = localStorage.getItem('isAdmin') === 'true'
+        setIsAdmin(hasAdminAccess)
         setLoading(false)
     }
 
@@ -35,9 +36,14 @@ const AdminLayout = ({ children }) => {
     ) : (
         <div className="min-h-screen flex flex-col items-center justify-center text-center px-6">
             <h1 className="text-2xl sm:text-4xl font-semibold text-slate-400">Você não tem permissão para acessar esta página</h1>
-            <Link href="/" className="bg-slate-700 text-white flex items-center gap-2 mt-8 p-2 px-6 max-sm:text-sm rounded-full">
-                Voltar ao início <ArrowRightIcon size={18} />
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 mt-8">
+                <Link href="/admin-login" className="bg-green-500 text-white flex items-center justify-center gap-2 p-2 px-6 max-sm:text-sm rounded-full hover:bg-green-600 transition">
+                    Fazer Login <ArrowRightIcon size={18} />
+                </Link>
+                <Link href="/" className="bg-slate-700 text-white flex items-center justify-center gap-2 p-2 px-6 max-sm:text-sm rounded-full hover:bg-slate-800 transition">
+                    Voltar ao início
+                </Link>
+            </div>
         </div>
     )
 }

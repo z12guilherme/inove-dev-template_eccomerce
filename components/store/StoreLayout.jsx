@@ -15,7 +15,8 @@ const StoreLayout = ({ children }) => {
     const [storeInfo, setStoreInfo] = useState(null)
 
     const fetchIsSeller = async () => {
-        setIsSeller(true)
+        const hasSellerAccess = localStorage.getItem('isSeller') === 'true'
+        setIsSeller(hasSellerAccess)
         setStoreInfo(dummyStoreData)
         setLoading(false)
     }

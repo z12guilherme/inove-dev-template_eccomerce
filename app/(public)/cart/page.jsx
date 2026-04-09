@@ -3,10 +3,11 @@ import Counter from "@/components/Counter";
 import OrderSummary from "@/components/OrderSummary";
 import PageTitle from "@/components/PageTitle";
 import { deleteItemFromCart } from "@/lib/features/cart/cartSlice";
-import { Trash2Icon } from "lucide-react";
+import { Trash2Icon, ShoppingCartIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
 
 export default function Cart() {
 
@@ -51,54 +52,63 @@ export default function Cart() {
 
             <div className="max-w-7xl mx-auto ">
                 {/* Title */}
-                <PageTitle heading="My Cart" text="items in your cart" linkText="Add more" />
+                <PageTitle heading="Meu Carrinho" text="itens no seu carrinho" linkText="Adicionar mais" />
 
-                <div className="flex items-start justify-between gap-5 max-lg:flex-col">
+                <div className="flex items-start justify-between gap-8 max-lg:flex-col pb-20">
 
-                    <table className="w-full max-w-4xl text-slate-600 table-auto">
-                        <thead>
-                            <tr className="max-sm:text-sm">
-                                <th className="text-left">Product</th>
-                                <th>Quantity</th>
-                                <th>Total Price</th>
-                                <th className="max-md:hidden">Remove</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                cartArray.map((item, index) => (
-                                    <tr key={index} className="space-x-2">
-                                        <td className="flex gap-3 my-4">
-                                            <div className="flex gap-3 items-center justify-center bg-slate-100 size-18 rounded-md">
-                                                <Image src={item.images[0]} className="h-14 w-auto" alt="" width={45} height={45} />
-                                            </div>
-                                            <div>
-                                                <p className="max-sm:text-sm">{item.name}</p>
-                                                <p className="text-xs text-slate-500">{item.category}</p>
-                                                <p>{currency}{item.price}</p>
-                                            </div>
-                                        </td>
-                                        <td className="text-center">
-                                            <Counter productId={item.id} />
-                                        </td>
-                                        <td className="text-center">{currency}{(item.price * item.quantity).toLocaleString()}</td>
-                                        <td className="text-center max-md:hidden">
-                                            <button onClick={() => handleDeleteItemFromCart(item.id)} className=" text-red-500 hover:bg-red-50 p-2.5 rounded-full active:scale-95 transition-all">
-                                                <Trash2Icon size={18} />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
+                    <div className="flex-1 w-full bg-white border border-slate-200 rounded-xl shadow-sm overflow-x-auto">
+                        <table className="w-full min-w-[600px] text-left border-collapse">
+                            <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase font-semibold">
+                                <tr>
+                                    <th className="px-6 py-4">Produto</th>
+                                    <th className="px-6 py-4 text-center">Quantidade</th>
+                                    <th className="px-6 py-4 text-center">Preço Total</th>
+                                    <th className="px-6 py-4 text-center max-md:hidden">Remover</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {
+                                    cartArray.map((item, index) => (
+                                        <tr key={index} className="hover:bg-slate-50/50 transition-colors">
+                                            <td className="px-6 py-5 flex gap-4 items-center">
+                                                <div className="flex-shrink-0 bg-white border border-slate-100 p-1.5 rounded-lg shadow-sm">
+                                                    <Image src={item.images[0]} className="h-16 w-16 object-contain" alt={item.name} width={64} height={64} />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium text-slate-800 text-base max-sm:text-sm">{item.name}</span>
+                                                    <span className="text-xs text-slate-400 mt-1">{item.category}</span>
+                                                    <span className="text-sm font-semibold text-slate-600 mt-1.5">{currency}{item.price}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-5 text-center">
+                                                <Counter productId={item.id} />
+                                            </td>
+                                            <td className="px-6 py-5 text-center font-medium text-slate-700 text-lg">{currency}{(item.price * item.quantity).toLocaleString()}</td>
+                                            <td className="px-6 py-5 text-center max-md:hidden">
+                                                <button onClick={() => handleDeleteItemFromCart(item.id)} className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-full transition-colors inline-flex justify-center items-center">
+                                                    <Trash2Icon size={20} />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                     <OrderSummary totalPrice={totalPrice} items={cartArray} />
                 </div>
             </div>
         </div>
     ) : (
-        <div className="min-h-[80vh] mx-6 flex items-center justify-center text-slate-400">
-            <h1 className="text-2xl sm:text-4xl font-semibold">Your cart is empty</h1>
+        <div className="min-h-[70vh] mx-6 flex flex-col items-center justify-center text-slate-500 gap-4">
+            <div className="bg-slate-50 p-8 rounded-full text-slate-300 mb-2 shadow-inner border border-slate-100">
+                <ShoppingCartIcon size={80} strokeWidth={1.5} />
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-slate-700">Seu carrinho está vazio</h1>
+            <p className="text-slate-500 text-sm max-w-sm text-center">Parece que você ainda não adicionou nenhum produto. Explore nossas categorias e encontre o que você precisa!</p>
+            <Link href="/shop" className="mt-6 bg-green-500 text-white px-8 py-3 rounded-full hover:bg-green-600 hover:shadow-md transition-all font-medium active:scale-95">
+                Ir para a Loja
+            </Link>
         </div>
     )
 }

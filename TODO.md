@@ -9,7 +9,7 @@ Este documento lista as melhorias e tarefas necessárias para transformar o temp
 - [x] Adaptar a página de "Adicionar Produto" no Admin salvando no Redux/LocalStorage.
 - [x] Criar a página de **Gerenciar Produtos** no Admin (Listar, Editar, Excluir e Upload de Fotos).
 - [x] Criar a página de **Gerenciar Categorias** no Admin (Adicionar/Remover categorias dinâmicas).
-- [ ] Criar a página de **Gerenciar Cupons** no Admin (Adicionar/Remover cupons com LocalStorage).
+- [x] Criar a página de **Gerenciar Cupons** no Admin (Adicionar/Remover cupons com LocalStorage).
 - [x] Criar a página de **Pedidos** no Admin (Visualizar compras feitas e alterar status de entrega).
 
 ## 🎨 Fase 2: Personalização White-label (Identidade Visual)

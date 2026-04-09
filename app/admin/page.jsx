@@ -1,5 +1,5 @@
 'use client'
-import { dummyAdminDashboardData } from "@/assets/assets"
+import { productDummyData, orderDummyData } from "@/assets/assets"
 import Loading from "@/components/Loading"
 import OrdersAreaChart from "@/components/OrdersAreaChart"
 import { CircleDollarSignIcon, ShoppingBasketIcon, TagsIcon, UsersIcon } from "lucide-react"
@@ -26,7 +26,23 @@ export default function AdminDashboard() {
     ]
 
     const fetchDashboardData = async () => {
-        setDashboardData(dummyAdminDashboardData)
+        // Puxa os dados do LocalStorage ou usa os de teste como fallback
+        const storedProducts = JSON.parse(localStorage.getItem('inove_products')) || productDummyData
+        const storedOrders = JSON.parse(localStorage.getItem('inove_orders')) || orderDummyData
+
+        // Calcula a receita total
+        const totalRevenue = storedOrders.reduce((acc, order) => acc + (order.total || 0), 0)
+
+        // Calcula clientes únicos (baseado no e-mail do endereço do pedido)
+        const uniqueCustomers = new Set(storedOrders.map(order => order.address?.email)).size
+
+        setDashboardData({
+            products: storedProducts.length,
+            revenue: totalRevenue.toFixed(2),
+            orders: storedOrders.length,
+            customers: uniqueCustomers,
+            allOrders: storedOrders.map(order => ({ createdAt: order.createdAt, total: order.total }))
+        })
         setLoading(false)
     }
 

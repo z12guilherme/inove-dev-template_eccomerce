@@ -13,7 +13,7 @@ const AdminNavbar = () => {
                 </p>
             </Link>
             <div className="flex items-center gap-3">
-                <p>Hi, Admin</p>
+                <p>Olá, Admin</p>
             </div>
         </div>
     )

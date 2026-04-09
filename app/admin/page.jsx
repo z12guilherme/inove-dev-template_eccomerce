@@ -19,10 +19,10 @@ export default function AdminDashboard() {
     })
 
     const dashboardCardsData = [
-        { title: 'Total Products', value: dashboardData.products, icon: ShoppingBasketIcon },
-        { title: 'Total Revenue', value: currency + dashboardData.revenue, icon: CircleDollarSignIcon },
-        { title: 'Total Orders', value: dashboardData.orders, icon: TagsIcon },
-        { title: 'Total Stores', value: dashboardData.stores, icon: StoreIcon },
+        { title: 'Total de Produtos', value: dashboardData.products, icon: ShoppingBasketIcon },
+        { title: 'Receita Total', value: currency + dashboardData.revenue, icon: CircleDollarSignIcon },
+        { title: 'Total de Pedidos', value: dashboardData.orders, icon: TagsIcon },
+        { title: 'Total de Lojas', value: dashboardData.stores, icon: StoreIcon },
     ]
 
     const fetchDashboardData = async () => {
@@ -38,7 +38,7 @@ export default function AdminDashboard() {
 
     return (
         <div className="text-slate-500">
-            <h1 className="text-2xl">Admin <span className="text-slate-800 font-medium">Dashboard</span></h1>
+            <h1 className="text-2xl">Painel <span className="text-slate-800 font-medium">Administrativo</span></h1>
 
             {/* Cards */}
             <div className="flex flex-wrap gap-5 my-10 mt-4">

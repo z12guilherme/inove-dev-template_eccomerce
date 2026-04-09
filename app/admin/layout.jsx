@@ -1,8 +1,8 @@
 import AdminLayout from "@/components/admin/AdminLayout";
 
 export const metadata = {
-    title: "GoCart. - Admin",
-    description: "GoCart. - Admin",
+    title: "INOVE-DEV - Administração",
+    description: "Painel Administrativo da INOVE-DEV",
 };
 
 export default function RootAdminLayout({ children }) {

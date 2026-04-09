@@ -8,30 +8,14 @@ CREATE TABLE public.profiles (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT NOT NULL,
-  role TEXT DEFAULT 'customer' CHECK (role IN ('admin', 'seller', 'customer')),
+  role TEXT DEFAULT 'customer' CHECK (role IN ('admin', 'customer')),
   image TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 2. TABELA DE LOJAS (Para o cenário de Marketplace / Vendedores)
-CREATE TABLE public.stores (
-  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
-  name TEXT NOT NULL,
-  username TEXT UNIQUE NOT NULL,
-  description TEXT,
-  logo TEXT,
-  address TEXT,
-  contact TEXT,
-  email TEXT,
-  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
--- 3. TABELA DE PRODUTOS
+-- 2. TABELA DE PRODUTOS
 CREATE TABLE public.products (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  store_id UUID REFERENCES public.stores(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   description TEXT,
   category TEXT NOT NULL,
@@ -42,7 +26,7 @@ CREATE TABLE public.products (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 4. TABELA DE AVALIAÇÕES DE PRODUTOS
+-- 3. TABELA DE AVALIAÇÕES DE PRODUTOS
 CREATE TABLE public.reviews (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   product_id UUID REFERENCES public.products(id) ON DELETE CASCADE,
@@ -52,7 +36,7 @@ CREATE TABLE public.reviews (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 5. TABELA DE ENDEREÇOS
+-- 4. TABELA DE ENDEREÇOS
 CREATE TABLE public.addresses (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
@@ -67,7 +51,7 @@ CREATE TABLE public.addresses (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 6. TABELA DE CUPONS DE DESCONTO
+-- 5. TABELA DE CUPONS DE DESCONTO
 CREATE TABLE public.coupons (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   code TEXT UNIQUE NOT NULL,
@@ -77,7 +61,7 @@ CREATE TABLE public.coupons (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 7. TABELA DE PEDIDOS
+-- 6. TABELA DE PEDIDOS
 CREATE TABLE public.orders (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   user_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
@@ -89,7 +73,7 @@ CREATE TABLE public.orders (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 8. TABELA DE ITENS DO PEDIDO
+-- 7. TABELA DE ITENS DO PEDIDO
 CREATE TABLE public.order_items (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   order_id UUID REFERENCES public.orders(id) ON DELETE CASCADE,
@@ -103,7 +87,6 @@ CREATE TABLE public.order_items (
 -- Habilitando RLS para evitar acessos não autorizados por padrão
 -- ========================================================================================
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.stores ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.addresses ENABLE ROW LEVEL SECURITY;

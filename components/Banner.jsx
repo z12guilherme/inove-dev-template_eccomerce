@@ -1,10 +1,19 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import toast from 'react-hot-toast';
 
 export default function Banner() {
 
     const [isOpen, setIsOpen] = React.useState(true);
+    const [bannerText, setBannerText] = useState('Ganhe 20% de DESCONTO no seu primeiro pedido!');
+
+    useEffect(() => {
+        const stored = localStorage.getItem('inove_settings')
+        if (stored) {
+            const parsed = JSON.parse(stored)
+            if (parsed.bannerText) setBannerText(parsed.bannerText)
+        }
+    }, [])
 
     const handleClaim = () => {
         setIsOpen(false);
@@ -15,7 +24,7 @@ export default function Banner() {
     return isOpen && (
         <div className="w-full px-6 py-1 font-medium text-sm text-white text-center bg-gradient-to-r from-violet-500 via-[#9938CA] to-[#E0724A]">
             <div className='flex items-center justify-between max-w-7xl  mx-auto'>
-                <p>Ganhe 20% de DESCONTO no seu primeiro pedido!</p>
+                <p>{bannerText}</p>
                 <div className="flex items-center space-x-6">
                     <button onClick={handleClaim} type="button" className="font-normal text-gray-800 bg-white px-7 py-2 rounded-full max-sm:hidden">Resgatar Oferta</button>
                     <button onClick={() => setIsOpen(false)} type="button" className="font-normal text-gray-800 py-2 rounded-full">

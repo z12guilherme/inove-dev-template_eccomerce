@@ -14,8 +14,8 @@ Este documento lista as melhorias e tarefas necessárias para transformar o temp
 
 ## 🎨 Fase 2: Personalização White-label (Identidade Visual)
 - [ ] Criar um sistema ou painel simples para alterar a paleta de cores principal (Tailwind Theme).
-- [ ] Permitir o upload dinâmico da Logo da marca pelo painel Admin.
-- [ ] Tornar o Banner promocional dinâmico (editável pelo Admin).
+- [x] Permitir o upload dinâmico da Logo da marca pelo painel Admin.
+- [x] Tornar o Banner promocional dinâmico (editável pelo Admin).
 - [ ] Tornar os links do Rodapé (Footer) e Redes Sociais dinâmicos.
 
 ## 🗄️ Fase 3: Integração Backend Real (Supabase)

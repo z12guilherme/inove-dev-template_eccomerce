@@ -37,4 +37,22 @@
 
 .no-scrollbar::-webkit-scrollbar {
     display: none;
-}
+}
+
+/* ── Utilitário global para inputs do admin ── */
+.input-field {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    background-color: white;
+    color: #334155;
+}
+.input-field:focus {
+    border-color: var(--brand-primary, #16a34a);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary, #16a34a) 12%, transparent);
+}
+

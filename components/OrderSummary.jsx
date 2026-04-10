@@ -9,7 +9,7 @@ import { dbAdapter } from "../dbAdapter";
 
 const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
 
-    const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '$';
+    const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || 'R$';
 
     const router = useRouter();
     const dispatch = useDispatch();

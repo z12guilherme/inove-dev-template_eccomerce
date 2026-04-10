@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export default function Cart() {
 
-    const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '$';
+    const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || 'R$';
     
     const { cartItems } = useSelector(state => state.cart);
     const products = useSelector(state => state.product.list);

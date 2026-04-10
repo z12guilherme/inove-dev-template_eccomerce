@@ -78,6 +78,30 @@ export const dbAdapter = {
         return newOrder;
     },
 
+    clearOrders: async () => {
+        const db = getDB();
+        if (!db) return;
+        db.orders = [];
+        saveDB(db);
+    },
+
+    deleteOrder: async (id) => {
+        const db = getDB();
+        if (!db) return;
+        db.orders = db.orders.filter(order => order.id !== id);
+        saveDB(db);
+    },
+
+    updateOrderStatus: async (id, status) => {
+        const db = getDB();
+        if (!db) return;
+        const orderIndex = db.orders.findIndex(o => o.id === id);
+        if (orderIndex > -1) {
+            db.orders[orderIndex].status = status;
+            saveDB(db);
+        }
+    },
+
     // ==========================================
     // CUPONS
     // ==========================================

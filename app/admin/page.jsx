@@ -2,13 +2,13 @@
 import Loading from "@/components/Loading"
 import OrdersAreaChart from "@/components/OrdersAreaChart"
 import { dbAdapter } from "../../dbAdapter"
-import { CircleDollarSignIcon, ShoppingBasketIcon, TagsIcon, UsersIcon } from "lucide-react"
+import { CircleDollarSignIcon, ShoppingBasketIcon, TagsIcon, UsersIcon, Trash2Icon } from "lucide-react"
 import toast from "react-hot-toast"
 import { useEffect, useState } from "react"
 
 export default function AdminDashboard() {
 
-    const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '$'
+    const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || 'R$'
 
     const [loading, setLoading] = useState(true)
     const [dashboardData, setDashboardData] = useState({
@@ -47,6 +47,14 @@ export default function AdminDashboard() {
         setLoading(false)
     }
 
+    const handleClearOrders = async () => {
+        if (window.confirm("Tem certeza que deseja excluir TODOS os pedidos do sistema? Essa ação não pode ser desfeita.")) {
+            await dbAdapter.clearOrders()
+            toast.success("Todos os pedidos foram excluídos!")
+            fetchDashboardData() // Atualiza os gráficos e cards imediatamente
+        }
+    }
+
     useEffect(() => {
         fetchDashboardData()
 
@@ -66,6 +74,10 @@ export default function AdminDashboard() {
         <div className="text-slate-500">
             <div className="flex justify-between items-center flex-wrap gap-4">
                 <h1 className="text-2xl">Painel <span className="text-slate-800 font-medium">Administrativo</span></h1>
+                <button onClick={handleClearOrders} className="flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-500 border border-red-200 transition-colors font-medium py-2 px-4 rounded-lg shadow-sm text-sm">
+                    <Trash2Icon size={16} />
+                    Limpar Pedidos
+                </button>
             </div>
 
             {/* Cards */}

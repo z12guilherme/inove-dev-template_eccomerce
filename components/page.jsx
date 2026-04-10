@@ -22,15 +22,15 @@ export default function Contact() {
                     <div className="space-y-6 text-slate-600">
                         <div className="flex items-center gap-4">
                             <div className="bg-green-50 p-3 rounded-full text-green-600"><MapPinIcon size={24} /></div>
-                            <p>Av. Paulista, 1000, Bela Vista, São Paulo, SP</p>
+                            <p>R. Pedro Moura Junior, 221, Belo Jardim - PE</p>
                         </div>
                         <div className="flex items-center gap-4">
                             <div className="bg-green-50 p-3 rounded-full text-green-600"><PhoneIcon size={24} /></div>
-                            <p>+55 11 98765-4321</p>
+                            <p>+55 81 9 8903 5561</p>
                         </div>
                         <div className="flex items-center gap-4">
                             <div className="bg-green-50 p-3 rounded-full text-green-600"><MailIcon size={24} /></div>
-                            <p>contato@inove-dev.com</p>
+                            <p>contato@inovedev.com.br</p>
                         </div>
                     </div>
                 </div>

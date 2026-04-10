@@ -45,6 +45,7 @@ export default function ManageOrders() {
                                 <th className="px-6 py-4">ID do Pedido</th>
                                 <th className="px-6 py-4">Cliente</th>
                                 <th className="px-6 py-4">Produtos</th>
+                                <th className="px-6 py-4 text-center">Pagamento</th>
                                 <th className="px-6 py-4 text-center">Data</th>
                                 <th className="px-6 py-4 text-center">Total</th>
                                 <th className="px-6 py-4 text-center">Status</th>
@@ -54,23 +55,42 @@ export default function ManageOrders() {
                         <tbody className="divide-y divide-slate-100">
                             {orders.map((order) => (
                                 <tr key={order.id} className="hover:bg-slate-50/50 transition-colors text-sm">
-                                    <td className="px-6 py-4 font-medium text-slate-700">{order.id.slice(-8).toUpperCase()}</td>
+                                    <td className="px-6 py-4 font-mono text-xs text-slate-600">
+                                        <span className="bg-slate-100 px-2 py-1 rounded">
+                                            #{order.id.slice(-8).toUpperCase()}
+                                        </span>
+                                    </td>
                                     <td className="px-6 py-4">
-                                        <p className="font-medium text-slate-800">{order.address.name}</p>
-                                        <p className="text-xs text-slate-400">{order.address.city}, {order.address.state}</p>
+                                        <p className="font-medium text-slate-800">
+                                            {order.customerName || order.address?.name || '—'}
+                                        </p>
+                                        <p className="text-xs text-slate-400">
+                                            {order.customerEmail || order.address?.email || ''}
+                                        </p>
+                                        <p className="text-xs text-slate-400">
+                                            {order.address?.city}{order.address?.state ? `, ${order.address.state}` : ''}
+                                        </p>
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="flex flex-col gap-1.5">
                                             {order.orderItems?.map((item, index) => (
                                                 <div key={index} className="text-xs text-slate-600 bg-slate-50 px-2 py-1.5 rounded border border-slate-100 flex items-center justify-between gap-2">
-                                                    <span className="truncate max-w-[150px]" title={item.product?.name}>{item.product?.name}</span>
+                                                    <span className="truncate max-w-[150px]" title={item.product?.name}>{item.product?.name || `Produto #${item.productId?.slice(-4)}`}</span>
                                                     <span className="font-medium text-slate-500 bg-white px-1.5 rounded shadow-sm">x{item.quantity}</span>
                                                 </div>
                                             ))}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 text-center">{new Date(order.createdAt).toLocaleDateString()}</td>
-                                    <td className="px-6 py-4 text-center font-medium text-slate-700">{currency}{order.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+                                    <td className="px-6 py-4 text-center">
+                                        <p className="text-xs font-medium">{order.paymentMethod || '—'}</p>
+                                        {order.isCouponUsed && (
+                                            <span className="text-[10px] bg-green-50 text-green-600 border border-green-200 px-1.5 py-0.5 rounded-full font-semibold mt-1 inline-block">
+                                                {order.couponCode || 'Cupom'}
+                                            </span>
+                                        )}
+                                    </td>
+                                    <td className="px-6 py-4 text-center text-xs">{new Date(order.createdAt).toLocaleDateString('pt-BR')}</td>
+                                    <td className="px-6 py-4 text-center font-medium text-slate-700">{currency}{Number(order.total).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
                                     <td className="px-6 py-4 text-center">
                                         <select
                                             value={order.status}

@@ -32,7 +32,7 @@ Este documento lista as melhorias e tarefas necessárias para transformar o temp
 
 ## ⚙️ Fase 5: Otimização e Lançamento (Produção)
 - [x] Revisar SEO (Meta tags, Open Graph, estruturação de links).
-- [ ] Adicionar testes E2E (End-to-End) para a jornada de compra (do carrinho ao checkout).
+- [x] Adicionar testes E2E (End-to-End) para a jornada de compra (do carrinho ao checkout).
 - [ ] Limpeza de código morto e pacotes não utilizados (ex: pasta `/store`).
 - [ ] Deploy oficial na plataforma (Ex: **Vercel**).
 

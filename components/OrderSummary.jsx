@@ -65,27 +65,35 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
         // Simulando tempo de resposta de um Gateway de Pagamento
         await new Promise(resolve => setTimeout(resolve, 1500));
         
-        // Montando o objeto do pedido para salvar no banco
+        // Montando o objeto do pedido com dados reais do endereço
         const orderData = {
             total: finalTotal,
-            status: "confirmed", // Pagamento aprovado, pedido confirmado
-            userId: "user_mock_123", // ID do usuário logado (simulado)
+            status: "confirmed",
+            customerName: selectedAddress.name,
+            customerEmail: selectedAddress.email,
             paymentMethod: paymentMethod,
             isCouponUsed: !!coupon,
+            couponCode: coupon?.code || null,
+            discountAmount: discountAmount,
+            shippingCost: shippingCost,
             orderItems: items.map(item => ({
                 productId: item.id,
                 quantity: item.quantity,
                 price: item.price,
-                product: item
+                product: { id: item.id, name: item.name, category: item.category, image: item.images?.[0] || null }
             })),
             address: selectedAddress
         };
 
         try {
             // 1. Salva o pedido no banco de dados simulado
-            await dbAdapter.createOrder(orderData);
-            
-            // 2. Limpa o carrinho (removendo cada item comprado)
+            const savedOrder = await dbAdapter.createOrder(orderData);
+
+            // 2. Guarda o ID do pedido para exibir na tela de sucesso
+            sessionStorage.setItem('last_order_id', savedOrder.id);
+            sessionStorage.setItem('last_order_customer', selectedAddress.name);
+
+            // 3. Limpa o carrinho (removendo cada item comprado)
             items.forEach(item => {
                 dispatch(deleteItemFromCart({ productId: item.id }));
             });

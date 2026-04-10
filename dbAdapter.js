@@ -132,4 +132,44 @@ export const dbAdapter = {
         saveDB(db);
         return newAddress;
     },
+
+    // ==========================================
+    // CONFIGURAÇÕES DO RODAPÉ (FOOTER)
+    // ==========================================
+    getFooterSettings: async () => {
+        const db = getDB();
+        if (!db || !db.footerSettings) {
+            return {
+                socialLinks: {
+                    facebook: 'https://www.facebook.com',
+                    instagram: 'https://www.instagram.com',
+                    twitter: 'https://twitter.com',
+                    linkedin: 'https://www.linkedin.com',
+                },
+                contact: {
+                    phone: '+55 11 99999-9999',
+                    email: 'contato@inove-dev.com',
+                    address: 'Rua da Inovação, 123 - São Paulo, SP',
+                },
+                productsLinks: [
+                    { text: 'Fones de Ouvido', path: '/' },
+                    { text: 'Headphones', path: '/' },
+                    { text: 'Smartphones', path: '/' },
+                    { text: 'Notebooks', path: '/' },
+                ],
+                navigationLinks: [
+                    { text: 'Início', path: '/' },
+                    { text: 'Política de Privacidade', path: '/' },
+                ],
+            };
+        }
+        return db.footerSettings;
+    },
+
+    saveFooterSettings: async (settings) => {
+        const db = getDB();
+        if (!db) return;
+        db.footerSettings = settings;
+        saveDB(db);
+    },
 };

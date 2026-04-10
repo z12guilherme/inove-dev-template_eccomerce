@@ -13,7 +13,7 @@ const DB_KEY = '@inove_dev_db';
 // Função auxiliar para ler o banco simulado
 const getDB = () => {
     if (typeof window === 'undefined') return null; // Prevenção para SSR no Next.js
-    
+
     let db = localStorage.getItem(DB_KEY);
     if (!db) {
         // Inicializa o banco de dados vazio (sem dados de demonstração)
@@ -44,16 +44,16 @@ export const dbAdapter = {
         const db = getDB();
         return db ? db.products : [];
     },
-    
+
     getProductById: async (id) => {
         const db = getDB();
         return db ? db.products.find(p => p.id === id) : null;
     },
-    
+
     createProduct: async (productData) => {
         const db = getDB();
         if (!db) return null;
-        
+
         const newProduct = { ...productData, id: `prod_${Date.now()}` };
         db.products.push(newProduct);
         saveDB(db);
@@ -67,11 +67,11 @@ export const dbAdapter = {
         const db = getDB();
         return db ? db.orders : [];
     },
-    
+
     createOrder: async (orderData) => {
         const db = getDB();
         if (!db) return null;
-        
+
         const newOrder = { ...orderData, id: `order_${Date.now()}`, createdAt: new Date().toISOString() };
         db.orders.push(newOrder);
         saveDB(db);

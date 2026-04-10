@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from "next/navigation"
-import { HomeIcon, TicketPercentIcon, PackageIcon, LayersIcon, LayoutListIcon, SettingsIcon } from "lucide-react"
+import { HomeIcon, TicketPercentIcon, PackageIcon, LayersIcon, LayoutListIcon, SettingsIcon, PanelBottomIcon, SwatchBookIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { assets } from "@/assets/assets"
@@ -16,8 +16,11 @@ const AdminSidebar = () => {
         { name: 'Pedidos', href: '/admin/orders', icon: LayoutListIcon },
         { name: 'Cupons', href: '/admin/coupons', icon: TicketPercentIcon  },
         { name: 'Produtos', href: '/admin/manage-products', icon: PackageIcon },
+        { name: 'Rodapé', href: '/admin/footer-settings', icon: PanelBottomIcon },
+        { name: 'Aparência', href: '/admin/theme', icon: SwatchBookIcon },
         { name: 'Configurações', href: '/admin/settings', icon: SettingsIcon },
     ]
+
 
     return (
         <div className="inline-flex h-full flex-col gap-5 border-r border-slate-200 sm:min-w-60">

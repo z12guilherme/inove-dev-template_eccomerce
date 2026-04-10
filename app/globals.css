@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+/* ── Paleta de cores da loja (editável pelo Admin) ── */
+:root {
+    --brand-primary: #16a34a;      /* green-600  */
+    --brand-primary-light: #bbf7d0; /* green-200  */
+    --brand-primary-mid: #86efac;  /* green-300  */
+    --brand-primary-dark: #15803d; /* green-700  */
+    --brand-accent: #1e293b;       /* slate-800  */
+}
+
+/* Expõe as variáveis como utilitários Tailwind */
+@theme inline {
+    --color-brand: var(--brand-primary);
+    --color-brand-light: var(--brand-primary-light);
+    --color-brand-mid: var(--brand-primary-mid);
+    --color-brand-dark: var(--brand-primary-dark);
+    --color-accent: var(--brand-accent);
+}
+
 @layer components {
     @keyframes marqueeScroll {
         0% {
@@ -19,4 +37,4 @@
 
 .no-scrollbar::-webkit-scrollbar {
     display: none;
-}
+}

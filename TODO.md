@@ -13,10 +13,10 @@ Este documento lista as melhorias e tarefas necessárias para transformar o temp
 - [x] Criar a página de **Pedidos** no Admin (Visualizar compras feitas e alterar status de entrega).
 
 ## 🎨 Fase 2: Personalização White-label (Identidade Visual)
-- [ ] Criar um sistema ou painel simples para alterar a paleta de cores principal (Tailwind Theme).
+- [x] Criar um sistema ou painel simples para alterar a paleta de cores principal (Tailwind Theme).
 - [x] Permitir o upload dinâmico da Logo da marca pelo painel Admin.
 - [x] Tornar o Banner promocional dinâmico (editável pelo Admin).
-- [ ] Tornar os links do Rodapé (Footer) e Redes Sociais dinâmicos.
+- [x] Tornar os links do Rodapé (Footer) e Redes Sociais dinâmicos.
 
 ## 🗄️ Fase 3: Persistência e Banco de Dados (Abordagem Simulada/Adaptável)
 - [x] Criar o script SQL (`migrations.sql`) com o novo modelo B2C limpo (como referência).

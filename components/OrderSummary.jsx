@@ -1,19 +1,22 @@
 import { PlusIcon, SquarePenIcon, XIcon } from 'lucide-react';
 import React, { useState } from 'react'
 import AddressModal from './AddressModal';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { deleteItemFromCart } from "@/lib/features/cart/cartSlice";
+import { dbAdapter } from "../dbAdapter";
 
-const OrderSummary = ({ totalPrice, items }) => {
+const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
 
     const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '$';
 
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const addressList = useSelector(state => state.address.list);
 
-    const [paymentMethod, setPaymentMethod] = useState('COD');
+    const [paymentMethod, setPaymentMethod] = useState('PIX');
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [showAddressModal, setShowAddressModal] = useState(false);
     const [couponCodeInput, setCouponCodeInput] = useState('');
@@ -21,25 +24,95 @@ const OrderSummary = ({ totalPrice, items }) => {
 
     const handleCouponCode = async (event) => {
         event.preventDefault();
-        
+
+        if (!couponCodeInput.trim()) {
+            toast.error('Por favor, insira o código do cupom.');
+            return;
+        }
+
+        const toastId = toast.loading('Verificando Cupom...');
+
+        try {
+            await new Promise(resolve => setTimeout(resolve, 800)); // Simula requisição rápida
+            const validCoupon = await dbAdapter.getCouponByCode(couponCodeInput);
+            
+            if (validCoupon) {
+                setCoupon(validCoupon);
+                toast.success('Cupom aplicado com sucesso!', { id: toastId });
+            } else {
+                toast.error('Cupom inválido ou expirado.', { id: toastId });
+            }
+        } catch (error) {
+            toast.error('Erro ao verificar cupom.', { id: toastId });
+        }
     }
 
     const handlePlaceOrder = async (e) => {
         e.preventDefault();
 
-        router.push('/orders')
+        if (shippingCost === 0) {
+            toast.error('Por favor, calcule o frete antes de finalizar o pedido.');
+            return;
+        }
+
+        if (!selectedAddress) {
+            toast.error('Por favor, selecione um endereço de entrega.');
+            return;
+        }
+
+        const toastId = toast.loading('Processando Pagamento...');
+
+        // Simulando tempo de resposta de um Gateway de Pagamento
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Montando o objeto do pedido para salvar no banco
+        const orderData = {
+            total: finalTotal,
+            status: "confirmed", // Pagamento aprovado, pedido confirmado
+            userId: "user_mock_123", // ID do usuário logado (simulado)
+            paymentMethod: paymentMethod,
+            isCouponUsed: !!coupon,
+            orderItems: items.map(item => ({
+                productId: item.id,
+                quantity: item.quantity,
+                price: item.price,
+                product: item
+            })),
+            address: selectedAddress
+        };
+
+        try {
+            // 1. Salva o pedido no banco de dados simulado
+            await dbAdapter.createOrder(orderData);
+            
+            // 2. Limpa o carrinho (removendo cada item comprado)
+            items.forEach(item => {
+                dispatch(deleteItemFromCart({ productId: item.id }));
+            });
+
+            toast.dismiss(toastId);
+            toast.success('Pagamento aprovado e pedido salvo!');
+            router.push('/checkout/success');
+        } catch (error) {
+            toast.dismiss(toastId);
+            toast.error('Erro ao processar o pedido.');
+            console.error(error);
+        }
     }
+
+    const discountAmount = coupon ? ((coupon.discount || coupon.discount_percentage || 0) / 100 * totalPrice) : 0;
+    const finalTotal = totalPrice + shippingCost - discountAmount;
 
     return (
         <div className='w-full max-w-lg lg:max-w-[340px] bg-slate-50/30 border border-slate-200 text-slate-500 text-sm rounded-xl p-7'>
             <h2 className='text-xl font-medium text-slate-600'>Resumo do Pedido</h2>
             <p className='text-slate-400 text-xs my-4'>Método de Pagamento</p>
             <div className='flex gap-2 items-center'>
-                <input type="radio" id="COD" onChange={() => setPaymentMethod('COD')} checked={paymentMethod === 'COD'} className='accent-gray-500' />
-                <label htmlFor="COD" className='cursor-pointer'>Pagamento na Entrega</label>
+                <input type="radio" id="PIX" onChange={() => setPaymentMethod('PIX')} checked={paymentMethod === 'PIX'} className='accent-green-500' />
+                <label htmlFor="PIX" className='cursor-pointer font-medium text-slate-700'>PIX (Aprovação Imediata)</label>
             </div>
-            <div className='flex gap-2 items-center mt-1'>
-                <input type="radio" id="STRIPE" name='payment' onChange={() => setPaymentMethod('STRIPE')} checked={paymentMethod === 'STRIPE'} className='accent-gray-500' />
+            <div className='flex gap-2 items-center mt-2'>
+                <input type="radio" id="STRIPE" name='payment' onChange={() => setPaymentMethod('STRIPE')} checked={paymentMethod === 'STRIPE'} className='accent-green-500' />
                 <label htmlFor="STRIPE" className='cursor-pointer'>Cartão de Crédito</label>
             </div>
             <div className='my-4 py-4 border-y border-slate-200 text-slate-400'>
@@ -77,14 +150,14 @@ const OrderSummary = ({ totalPrice, items }) => {
                         {coupon && <p>Cupom:</p>}
                     </div>
                     <div className='flex flex-col gap-1 font-medium text-right'>
-                        <p>{currency}{totalPrice.toLocaleString()}</p>
-                        <p>Grátis</p>
-                        {coupon && <p>{`-${currency}${(coupon.discount / 100 * totalPrice).toFixed(2)}`}</p>}
+                        <p>{currency}{totalPrice.toFixed(2)}</p>
+                        <p>{shippingCost > 0 ? `${currency}${shippingCost.toFixed(2)}` : 'A calcular'}</p>
+                        {coupon && <p className="text-green-500">{`-${currency}${discountAmount.toFixed(2)}`}</p>}
                     </div>
                 </div>
                 {
                     !coupon ? (
-                        <form onSubmit={e => toast.promise(handleCouponCode(e), { loading: 'Verificando Cupom...' })} className='flex justify-center gap-3 mt-3'>
+                    <form onSubmit={handleCouponCode} className='flex justify-center gap-3 mt-3'>
                             <input onChange={(e) => setCouponCodeInput(e.target.value)} value={couponCodeInput} type="text" placeholder='Código do Cupom' className='border border-slate-400 p-1.5 rounded w-full outline-none' />
                             <button className='bg-slate-600 text-white px-3 rounded hover:bg-slate-800 active:scale-95 transition-all'>Aplicar</button>
                         </form>
@@ -99,9 +172,9 @@ const OrderSummary = ({ totalPrice, items }) => {
             </div>
             <div className='flex justify-between py-4'>
                 <p>Total:</p>
-                <p className='font-medium text-right'>{currency}{coupon ? (totalPrice - (coupon.discount / 100 * totalPrice)).toFixed(2) : totalPrice.toLocaleString()}</p>
+                <p className='font-medium text-right text-lg text-slate-800'>{currency}{finalTotal.toFixed(2)}</p>
             </div>
-            <button onClick={e => toast.promise(handlePlaceOrder(e), { loading: 'Finalizando Pedido...' })} className='w-full bg-slate-700 text-white py-2.5 rounded hover:bg-slate-900 active:scale-95 transition-all'>Finalizar Pedido</button>
+            <button onClick={handlePlaceOrder} className='w-full bg-green-500 text-white py-3 mt-2 rounded-lg font-medium hover:bg-green-600 active:scale-95 transition-all'>Finalizar Pedido</button>
 
             {showAddressModal && <AddressModal setShowAddressModal={setShowAddressModal} />}
 

@@ -1,4 +1,3 @@
-import { productDummyData, orderDummyData, dummyUserData, couponDummyData, addressDummyData } from '@/assets/assets';
 
 /**
  * INOVE-DEV DB Adapter
@@ -17,13 +16,13 @@ const getDB = () => {
     
     let db = localStorage.getItem(DB_KEY);
     if (!db) {
-        // Inicializa o banco de dados com os dados "mockados" do sistema se estiver vazio
+        // Inicializa o banco de dados vazio (sem dados de demonstração)
         db = {
-            products: productDummyData,
-            orders: orderDummyData,
-            users: [dummyUserData],
-            coupons: couponDummyData,
-            addresses: [addressDummyData],
+            products: [],
+            orders: [],
+            users: [],
+            coupons: [],
+            addresses: [],
         };
         localStorage.setItem(DB_KEY, JSON.stringify(db));
         return db;

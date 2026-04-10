@@ -25,10 +25,10 @@ Este documento lista as melhorias e tarefas necessárias para transformar o temp
 - [x] Documentar no README onde o desenvolvedor deve integrar a API real (Supabase, Firebase, Node, etc.).
 
 ## 💳 Fase 4: Checkout e Pagamentos (Simulados)
-- [ ] Revisar o componente `OrderSummary` para o fluxo de finalização.
-- [ ] Criar fluxo de Checkout Simulado (Mock de tela de sucesso/falha para Cartão de Crédito e PIX).
-- [ ] Criar cálculo de Frete Simulado (valores fixos ou regras simples baseadas em prefixo de CEP).
-- [ ] Adicionar confirmação visual de Pedido Concluído (simulando a etapa em que um E-mail seria disparado).
+- [x] Revisar o componente `OrderSummary` para o fluxo de finalização.
+- [x] Criar fluxo de Checkout Simulado (Mock de tela de sucesso/falha para Cartão de Crédito e PIX).
+- [x] Criar cálculo de Frete Simulado (valores fixos ou regras simples baseadas em prefixo de CEP).
+- [x] Adicionar confirmação visual de Pedido Concluído (simulando a etapa em que um E-mail seria disparado).
 
 ## ⚙️ Fase 5: Otimização e Lançamento (Produção)
 - [ ] Revisar SEO (Meta tags, Open Graph, estruturação de links).

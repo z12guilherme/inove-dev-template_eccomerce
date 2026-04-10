@@ -3,8 +3,8 @@ import Counter from "@/components/Counter";
 import OrderSummary from "@/components/OrderSummary";
 import PageTitle from "@/components/PageTitle";
 import { deleteItemFromCart } from "@/lib/features/cart/cartSlice";
-import { Trash2Icon, ShoppingCartIcon } from "lucide-react";
-import Image from "next/image";
+import { Trash2Icon, ShoppingCartIcon, PackageIcon } from "lucide-react";
+import ShippingCalculator from "@/components/ShippingCalculator";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
@@ -20,6 +20,7 @@ export default function Cart() {
 
     const [cartArray, setCartArray] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [shippingCost, setShippingCost] = useState(0);
 
     const createCartArray = () => {
         setTotalPrice(0);
@@ -71,8 +72,8 @@ export default function Cart() {
                                     cartArray.map((item, index) => (
                                         <tr key={index} className="hover:bg-slate-50/50 transition-colors">
                                             <td className="px-6 py-5 flex gap-4 items-center">
-                                                <div className="flex-shrink-0 bg-white border border-slate-100 p-1.5 rounded-lg shadow-sm">
-                                                    <Image src={item.images[0]} className="h-16 w-16 object-contain" alt={item.name} width={64} height={64} />
+                                                <div className="flex-shrink-0 bg-slate-100 border border-slate-200 rounded-lg shadow-sm h-16 w-16 flex items-center justify-center">
+                                                    <PackageIcon className="text-slate-400" size={32} />
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="font-medium text-slate-800 text-base max-sm:text-sm">{item.name}</span>
@@ -95,7 +96,13 @@ export default function Cart() {
                             </tbody>
                         </table>
                     </div>
-                    <OrderSummary totalPrice={totalPrice} items={cartArray} />
+                    
+                    <div className="w-full lg:w-[400px] flex flex-col gap-6">
+                        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
+                            <ShippingCalculator onShippingCalculated={setShippingCost} />
+                        </div>
+                        <OrderSummary totalPrice={totalPrice} shippingCost={shippingCost} items={cartArray} />
+                    </div>
                 </div>
             </div>
         </div>

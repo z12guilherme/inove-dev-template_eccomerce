@@ -47,47 +47,17 @@ export default function AdminDashboard() {
         setLoading(false)
     }
 
-    const handleTestOrder = async () => {
-        toast.loading('Simulando pedido...')
-
-        // Dados de exemplo para o novo pedido
-        const sampleOrderData = {
-            total: 288.90,
-            status: "pending",
-            userId: "user_31dQbH27HVtovbs13X2cmqefddM", // ID do usuário admin
-            paymentMethod: "PIX",
-            isCouponUsed: false,
-            orderItems: [
-                { productId: "prod_1", quantity: 1, price: 99.90, product: { name: "Luminária de Mesa" } },
-                { productId: "prod_2", quantity: 1, price: 189.00, product: { name: "Smart Speaker" } }
-            ],
-            address: {
-                name: "Cliente de Teste",
-                email: `teste${Date.now()}@inovedev.com`,
-                street: "Rua do Teste, 123",
-                city: "Cidade Teste",
-            }
-        };
-
-        try {
-            const newOrder = await dbAdapter.createOrder(sampleOrderData);
-            toast.dismiss();
-            if (newOrder) {
-                toast.success(`Pedido de teste #${newOrder.id.split('_')[1]} criado!`);
-                // Re-busca os dados para atualizar o painel em tempo real
-                await fetchDashboardData();
-            } else {
-                toast.error("Falha ao criar o pedido de teste.");
-            }
-        } catch (error) {
-            toast.dismiss();
-            console.error("Erro ao criar pedido de teste:", error);
-            toast.error("Ocorreu um erro ao criar o pedido.");
-        }
-    };
-
     useEffect(() => {
         fetchDashboardData()
+
+        // Atualiza o painel automaticamente se houver mudanças em outra aba ou ao focar na janela
+        window.addEventListener('storage', fetchDashboardData)
+        window.addEventListener('focus', fetchDashboardData)
+
+        return () => {
+            window.removeEventListener('storage', fetchDashboardData)
+            window.removeEventListener('focus', fetchDashboardData)
+        }
     }, [])
 
     if (loading) return <Loading />
@@ -96,9 +66,6 @@ export default function AdminDashboard() {
         <div className="text-slate-500">
             <div className="flex justify-between items-center flex-wrap gap-4">
                 <h1 className="text-2xl">Painel <span className="text-slate-800 font-medium">Administrativo</span></h1>
-                <button onClick={handleTestOrder} className="bg-blue-500 hover:bg-blue-600 transition-colors text-white font-bold py-2 px-4 rounded-lg shadow-sm">
-                    Simular Novo Pedido
-                </button>
             </div>
 
             {/* Cards */}

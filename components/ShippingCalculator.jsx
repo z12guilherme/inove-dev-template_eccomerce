@@ -15,17 +15,25 @@ export default function ShippingCalculator({ onShippingCalculated }) {
 
         setLoading(true)
         toast.loading('Calculando frete...')
-        // Simula uma chamada de API que leva 1 segundo
-        await new Promise(resolve => setTimeout(resolve, 1000))
 
         let shippingCost = 0
-        // Regra de negócio simulada e simples para o frete
-        if (cep.startsWith('7')) { // Ex: Região Centro-Oeste
-            shippingCost = 15.50
-        } else if (cep.startsWith('2')) { // Ex: Região Sudeste (RJ)
-            shippingCost = 25.80
-        } else { // Outras regiões
-            shippingCost = 35.00
+        
+        try {
+            // === INTEGRAÇÃO REAL ===
+            const response = await fetch(`/api/frete?cep=${cep}`)
+            const data = await response.json()
+            if (data.error) throw new Error(data.error)
+            shippingCost = parseFloat(data.valor.replace(',', '.'))
+
+            // === SIMULAÇÃO TEMPORÁRIA (Desativada) ===
+            // await new Promise(resolve => setTimeout(resolve, 1000))
+            // shippingCost = cep.startsWith('7') ? 15.50 : cep.startsWith('2') ? 25.80 : 35.00;
+        } catch (error) {
+            console.error('Detalhes do erro na requisição de frete:', error)
+            
+            // Fallback: Se os Correios falharem (timeout), usamos a regra simulada para não travar a loja
+            shippingCost = cep.startsWith('7') ? 15.50 : cep.startsWith('2') ? 25.80 : 35.00;
+            toast.error('Correios instável. Aplicando frete fixo regional.', { duration: 4000 })
         }
         
         onShippingCalculated(shippingCost)

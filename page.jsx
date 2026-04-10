@@ -1,8 +1,7 @@
 'use client'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import Image from 'next/image'
-import { Trash2Icon } from 'lucide-react'
+import { Trash2Icon, PackageIcon } from 'lucide-react'
 import { deleteProduct } from '@/lib/features/product/productSlice'
 import toast from 'react-hot-toast'
 
@@ -39,8 +38,8 @@ export default function ManageProducts() {
                             {products.map((product) => (
                                 <tr key={product.id} className="hover:bg-slate-50/50 transition-colors">
                                     <td className="px-6 py-4 flex gap-4 items-center">
-                                        <div className="flex-shrink-0 bg-white border border-slate-100 p-1.5 rounded-lg shadow-sm">
-                                            <Image src={product.images[0]} className="h-12 w-12 object-contain" alt={product.name} width={48} height={48} />
+                                        <div className="flex-shrink-0 bg-slate-100 border border-slate-200 rounded-lg shadow-sm h-12 w-12 flex items-center justify-center">
+                                            <PackageIcon className="text-slate-400" size={24} />
                                         </div>
                                         <span className="font-medium text-slate-800">{product.name}</span>
                                     </td>

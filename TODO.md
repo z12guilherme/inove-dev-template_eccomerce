@@ -18,19 +18,17 @@ Este documento lista as melhorias e tarefas necessárias para transformar o temp
 - [x] Tornar o Banner promocional dinâmico (editável pelo Admin).
 - [ ] Tornar os links do Rodapé (Footer) e Redes Sociais dinâmicos.
 
-## 🗄️ Fase 3: Integração Backend Real (Supabase)
-- [x] Criar o script SQL (`migrations.sql`) com o novo modelo B2C limpo.
-- [ ] Configurar ambiente do Supabase e credenciais no arquivo `.env`.
-- [ ] Substituir o "Mock Login" pelo **Supabase Auth** (E-mail/Senha).
-- [ ] Migrar a listagem/criação de Produtos para o **PostgreSQL** do Supabase.
-- [ ] Implementar upload de imagens reais usando o **Supabase Storage** (remover Base64).
-- [ ] Migrar o Carrinho e Histórico de Pedidos para o banco de dados.
+## 🗄️ Fase 3: Persistência e Banco de Dados (Abordagem Simulada/Adaptável)
+- [x] Criar o script SQL (`migrations.sql`) com o novo modelo B2C limpo (como referência).
+- [x] Criar "Adapters" ou funções de serviço genéricas para chamadas de DB (permitindo plugar qualquer backend futuramente).
+- [x] Consolidar a simulação do Banco de Dados no **LocalStorage/Redux** como implementação padrão do template.
+- [x] Documentar no README onde o desenvolvedor deve integrar a API real (Supabase, Firebase, Node, etc.).
 
-## 💳 Fase 4: Checkout e Pagamentos
+## 💳 Fase 4: Checkout e Pagamentos (Simulados)
 - [ ] Revisar o componente `OrderSummary` para o fluxo de finalização.
-- [ ] Integrar Gateway de Pagamento (Ex: **Stripe** para Cartão e **Mercado Pago** para PIX).
-- [ ] Integrar cálculo de Frete (Ex: API dos Correios, Melhor Envio ou Kangu).
-- [ ] Disparo automático de E-mail de confirmação de pedido.
+- [ ] Criar fluxo de Checkout Simulado (Mock de tela de sucesso/falha para Cartão de Crédito e PIX).
+- [ ] Criar cálculo de Frete Simulado (valores fixos ou regras simples baseadas em prefixo de CEP).
+- [ ] Adicionar confirmação visual de Pedido Concluído (simulando a etapa em que um E-mail seria disparado).
 
 ## ⚙️ Fase 5: Otimização e Lançamento (Produção)
 - [ ] Revisar SEO (Meta tags, Open Graph, estruturação de links).

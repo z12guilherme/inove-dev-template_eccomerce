@@ -25,21 +25,22 @@ export default function ShippingCalculator({ onShippingCalculated }) {
             if (data.error) throw new Error(data.error)
             shippingCost = parseFloat(data.valor.replace(',', '.'))
 
-            // === SIMULAÇÃO TEMPORÁRIA (Desativada) ===
-            // await new Promise(resolve => setTimeout(resolve, 1000))
-            // shippingCost = cep.startsWith('7') ? 15.50 : cep.startsWith('2') ? 25.80 : 35.00;
+            toast.dismiss()
+            if (data.isFallback) {
+                toast.error('Correios instável. Aplicando frete fixo regional.', { duration: 4000 })
+            } else {
+                toast.success('Frete calculado com sucesso!')
+            }
         } catch (error) {
+            toast.dismiss()
             console.error('Detalhes do erro na requisição de frete:', error)
-            
-            // Fallback: Se os Correios falharem (timeout), usamos a regra simulada para não travar a loja
-            shippingCost = cep.startsWith('7') ? 15.50 : cep.startsWith('2') ? 25.80 : 35.00;
-            toast.error('Correios instável. Aplicando frete fixo regional.', { duration: 4000 })
+            toast.error('Erro ao calcular o frete.')
+            setLoading(false)
+            return
         }
         
         onShippingCalculated(shippingCost)
         setLoading(false)
-        toast.dismiss()
-        toast.success('Frete calculado com sucesso!')
     }
 
     return (

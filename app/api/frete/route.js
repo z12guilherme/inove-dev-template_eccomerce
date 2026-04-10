@@ -33,6 +33,16 @@ export async function GET(request) { // Certifique-se de que não há "default" 
 
     } catch (error) {
         console.error('Erro detalhado da API dos Correios:', error);
-        return NextResponse.json({ error: 'Erro ao consultar Correios' }, { status: 500 });
+        
+        // Fallback movido para o Backend: garante que a API nunca falhe!
+        let valorSimulado = '35,00';
+        if (cepDestino.startsWith('7')) valorSimulado = '15,50';
+        else if (cepDestino.startsWith('2')) valorSimulado = '25,80';
+
+        return NextResponse.json({ 
+            valor: valorSimulado, 
+            prazo: '5', 
+            isFallback: true 
+        });
     }
 }

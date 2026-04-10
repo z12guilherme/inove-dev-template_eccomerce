@@ -31,7 +31,7 @@ Este documento lista as melhorias e tarefas necessárias para transformar o temp
 - [x] Adicionar confirmação visual de Pedido Concluído (simulando a etapa em que um E-mail seria disparado).
 
 ## ⚙️ Fase 5: Otimização e Lançamento (Produção)
-- [ ] Revisar SEO (Meta tags, Open Graph, estruturação de links).
+- [x] Revisar SEO (Meta tags, Open Graph, estruturação de links).
 - [ ] Adicionar testes E2E (End-to-End) para a jornada de compra (do carrinho ao checkout).
 - [ ] Limpeza de código morto e pacotes não utilizados (ex: pasta `/store`).
 - [ ] Deploy oficial na plataforma (Ex: **Vercel**).

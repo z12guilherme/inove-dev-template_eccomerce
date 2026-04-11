@@ -1,79 +1,100 @@
-# INOVE-DEV E-commerce
+# Inove Commerce 🛒
 
-Bem-vindo ao repositório do e-commerce da INOVE-DEV! Este projeto é um template de loja virtual *single-tenant* (loja única), construído para ser robusto, moderno e altamente personalizável.
+O **Inove Commerce** é um template de E-commerce robusto, escalável e de alta conversão. Inspirado nos maiores varejistas do mercado brasileiro (como *Mercado Livre* e *Americanas*), este projeto foi desenvolvido para oferecer uma base sólida e moderna para qualquer negócio online.
 
-## Tecnologias Utilizadas
-- Next.js
-- React
-- Tailwind CSS
-- Zustand (para gerenciamento de estado)
+![Inove Commerce Banner](./assets/hero_model_img.png)
 
-## 🚀 Começando
+## 📌 Visão Geral
 
-Para rodar o projeto localmente, siga estes passos:
+Este template entrega uma jornada de compra ponta-a-ponta, apresentando um Front-end moderno voltado para performance e experiência do usuário (UX), além de um Painel Administrativo completo para a gestão da operação.
 
-1. **Clone o repositório:**
-   ```bash
-   git clone https://github.com/seu-usuario/inove-dev-ecommerce.git
-   cd inove-dev-ecommerce
-   ```
+### ✨ Principais Funcionalidades
 
-2. **Instale as dependências:**
-   ```bash
-   npm install
-   ```
+- **Integração Logística (Correios):** Cálculo dinâmico de frete baseado no CEP do cliente através de integração direta com API de entregas.
+- **Pagamento Automatizado:** Esteira de checkout otimizada e estruturada para receber integrações com os maiores Gateways de pagamento (Pix, Cartão de Crédito, Boletos).
+- **Painel Administrativo Independente:** Dashboard administrativo seguro para gestão de Cupons, Pedidos, e Cadastro de Produtos, além de personalização de aparência.
+- **Design Responsivo e Premium:** Interfaces dinâmicas, com micro-interações, inspiradas nas maiores lojas online do Brasil para garantir a melhor conversão.
+- **Gestão Global de Estado:** Carrinho de compras reativo utilizando o estado global para oferecer feedback instantâneo sem recarregar a tela.
 
-3. **Rode o servidor de desenvolvimento:**
-   ```bash
-   npm run dev
-   ```
+---
 
-Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado. O projeto já vem com dados de exemplo (`mock`) e funciona de forma autônoma usando o `LocalStorage` do navegador para simular um banco de dados.
+## 🚀 Tecnologias Utilizadas
 
-## 🔌 Arquitetura e Integração com Backend
+A stack foi cuidadosamente escolhida para priorizar **Server-side Rendering (SSR)** para SEO, velocidade e fácil manutenção:
 
-Para facilitar a customização e a integração com diferentes backends, o projeto utiliza o **Padrão de Adaptador (Adapter Pattern)**. Toda a comunicação com o "banco de dados" é centralizada em um único arquivo:
+- **Framework:** [Next.js 15](https://nextjs.org/) (App Router & Turbopack)
+- **Estilização:** [Tailwind CSS](https://tailwindcss.com/) com design system customizável
+- **Gerenciamento de Estado:** [Redux Toolkit](https://redux-toolkit.js.org/) (Carrinho, Produtos, Endereços)
+- **Testes Automatizados:** [Vitest](https://vitest.dev/) + React Testing Library
+- **Notificações:** React Hot Toast
+- **Ícones:** Lucide React
 
-`lib/db/dbAdapter.js`
+*(O sistema atualmente utiliza um `dbAdapter` robusto construído sobre o `localStorage` do navegador para simular a reatividade do banco de dados perfeitamente. O design pattern utilizado permite trocar facilmente para um ORM como Prisma ou integração com Supabase/Firebase backend).*
 
-Por padrão, este adaptador lê e escreve dados no `LocalStorage` do navegador. Isso permite que qualquer desenvolvedor clone o projeto e o execute imediatamente, sem precisar configurar um banco de dados real.
+---
 
-### Como Conectar um Backend Real (Ex: Supabase)
+## 🛠️ Como Rodar Localmente
 
-Para conectar seu próprio backend, você só precisa modificar as funções dentro do `dbAdapter.js`. O resto da aplicação continuará funcionando sem alterações.
+Certifique-se de ter o **Node.js** (v18+) instalado em sua máquina.
 
-**Exemplo: Alterando a função `getProducts` para usar o Supabase**
+**1. Clone o repositório e acesse a pasta:**
+```bash
+git clone https://github.com/seu-usuario/inove-dev-template_eccomerce.git
+cd inove-dev-template_eccomerce
+```
 
-1.  **Instale o cliente do Supabase:**
-    ```bash
-    npm install @supabase/supabase-js
-    ```
+**2. Instale as dependências essenciais:**
+```bash
+npm install
+```
 
-2.  **Modifique a função em `lib/db/dbAdapter.js`:**
+**3. Inicie o servidor de desenvolvimento:**
+```bash
+npm run dev
+```
 
-    ```javascript
-    // Exemplo de como ficaria com Supabase
-    import { createClient } from '@supabase/supabase-js'
+Abra [http://localhost:3000](http://localhost:3000) com o seu navegador para ver o E-commerce público.
+Acesse [http://localhost:3000/admin](http://localhost:3000/admin) para ver o Dashboard de controle.
 
-    // Crie o cliente Supabase fora do adapter ou em um arquivo de configuração
-    const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY')
+---
 
-    export const dbAdapter = {
-        // ... outros métodos
-        getProducts: async () => {
-            // Lógica antiga (LocalStorage) foi removida
-            const { data, error } = await supabase.from('products').select('*');
-            if (error) {
-                console.error("Erro ao buscar produtos:", error);
-                return [];
-            }
-            return data;
-        },
-        // ... adapte os outros métodos (createProduct, getOrders, etc.) da mesma forma
-    };
-    ```
+## 🧪 Suíte de Testes (Vitest)
 
-Para auxiliar na criação das tabelas no seu banco de dados, você pode usar o arquivo `migrations.sql` como referência. Ele contém a estrutura de tabelas pensada para este projeto, compatível com PostgreSQL (usado pelo Supabase).
+O Inove Commerce preza pela confiabilidade financeira. Nossa cobertura de testes automatizados cobre desde interações de componentes até lógicas profundas de checkout (subtotal, desconto, cálculo de frete) e o dbAdapter.
 
-## Créditos e Agradecimentos
-Este projeto foi adaptado a partir do excelente repositório **GoCart**. Nossos sinceros agradecimentos aos desenvolvedores originais por disponibilizarem uma base tão incrível e bem estruturada para a comunidade open-source.
+Para rodar os testes:
+```bash
+npm run test
+```
+
+Para rodar os testes de forma progressiva (Watch mode):
+```bash
+npm run test:watch
+```
+
+---
+
+## 📁 Estrutura de Diretórios 
+
+```text
+├── app/
+│   ├── (public)/          # Rotas públicas (Loja, Carrinho, Checkout, Sobre, etc)
+│   ├── admin/             # Rotas do Dashboard Administrativo
+│   ├── api/               # API Routes do Next.js (Ex: Cálculo de CEP)
+│   └── globals.css        # Variáveis globais base do Tailwind
+├── components/            # Componentes React reutilizáveis (UI)
+├── lib/                   # Configurações do Redux, Adapters (DB) e Serviços Auxiliares
+├── assets/                # Configurações de exportações de imagens em JS e Mocks
+└── __tests__/             # Suíte auxiliar de testes com Vitest
+```
+
+---
+
+## 🤝 Feito por Inove Dev
+
+Desenvolvido e mantido por **Inove Dev**. Uma solução sob medida focada em escalabilidade e resultados rápidos para negócios inovadores.
+
+*Descreva sua ideia e nossa equipe transformará seus problemas complexos em soluções digitais simples e eficientes.*
+
+**Email:** contato@inovedev.com.br
+**Siga-nos para mais modelos:** [inovedev.com.br](https://inovedev.com.br)

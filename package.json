@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watch"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
@@ -27,8 +28,9 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
-    "jest": "^30.3.0",
-    "jest-environment-jsdom": "^30.3.0",
-    "tailwindcss": "^4"
+    "@testing-library/user-event": "^14.6.1",
+    "jsdom": "^29.0.2",
+    "tailwindcss": "^4",
+    "vitest": "^4.1.4"
   }
 }

@@ -21,8 +21,10 @@ import profile_pic1 from "./profile_pic1.jpg"
 import profile_pic2 from "./profile_pic2.jpg"
 import profile_pic3 from "./profile_pic3.jpg"
 
+import logo from "./logo.png"
+
 export const assets = {
-    upload_area, hero_model_img,
+    upload_area, hero_model_img, happy_store, logo,
     hero_product_img1, hero_product_img2, gs_logo,
     product_img1, product_img2, product_img3, product_img4, product_img5, product_img6,
     product_img7, product_img8, product_img9, product_img10, product_img11, product_img12,
@@ -70,9 +72,9 @@ export const productDummyData = [
         price: 99.90,
         images: [product_img1, product_img2, product_img3, product_img4],
         category: "Casa & Cozinha",
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         rating: dummyRatingsData,
         createdAt: 'Sat Jul 29 2025 14:51:25 GMT+0530 (India Standard Time)',
         updatedAt: 'Sat Jul 29 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -84,9 +86,9 @@ export const productDummyData = [
         mrp: 250.00,
         price: 189.00,
         images: [product_img2],
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         category: "Eletrônicos",
         rating: dummyRatingsData,
         createdAt: 'Sat Jul 28 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -99,9 +101,9 @@ export const productDummyData = [
         mrp: 360.00,
         price: 279.90,
         images: [product_img3],
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         category: "Eletrônicos",
         rating: dummyRatingsData,
         createdAt: 'Sat Jul 27 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -114,9 +116,9 @@ export const productDummyData = [
         mrp: 470.00,
         price: 329.00,
         images: [product_img4],
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         category: "Eletrônicos",
         rating: dummyRatingsData,
         createdAt: 'Sat Jul 26 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -129,9 +131,9 @@ export const productDummyData = [
         mrp: 349.00,
         price: 289.00,
         images: [product_img5],
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         category: "Eletrônicos",
         rating: [...dummyRatingsData, ...dummyRatingsData],
         createdAt: 'Sat Jul 25 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -144,9 +146,9 @@ export const productDummyData = [
         mrp: 259.00,
         price: 199.00,
         images: [product_img6],
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         category: "Eletrônicos",
         rating: [...dummyRatingsData, ...dummyRatingsData],
         createdAt: 'Sat Jul 25 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -159,9 +161,9 @@ export const productDummyData = [
         mrp: 289.00,
         price: 199.90,
         images: [product_img7],
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         category: "Eletrônicos",
         rating: [...dummyRatingsData, ...dummyRatingsData],
         createdAt: 'Sat Jul 24 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -174,9 +176,9 @@ export const productDummyData = [
         mrp: 990.00,
         price: 829.00,
         images: [product_img8],
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         category: "Eletrônicos",
         rating: [...dummyRatingsData, ...dummyRatingsData],
         createdAt: 'Sat Jul 23 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -189,9 +191,9 @@ export const productDummyData = [
         mrp: 389.00,
         price: 299.90,
         images: [product_img9],
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         category: "Eletrônicos",
         rating: [...dummyRatingsData, ...dummyRatingsData],
         createdAt: 'Sat Jul 22 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -204,9 +206,9 @@ export const productDummyData = [
         mrp: 1179.00,
         price: 929.00,
         images: [product_img10],
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         category: "Eletrônicos",
         rating: [...dummyRatingsData, ...dummyRatingsData],
         createdAt: 'Sat Jul 21 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -219,9 +221,9 @@ export const productDummyData = [
         mrp: 139.00,
         price: 99.00,
         images: [product_img11],
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         category: "Eletrônicos",
         rating: [...dummyRatingsData, ...dummyRatingsData],
         createdAt: 'Sat Jul 20 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -234,9 +236,9 @@ export const productDummyData = [
         mrp: 1199.00,
         price: 999.00,
         images: [product_img12],
-        storeId: "seller_1",
+
         inStock: true,
-        store: dummyStoreData,
+
         category: "Casa & Cozinha",
         rating: [...dummyRatingsData, ...dummyRatingsData],
         createdAt: 'Sat Jul 19 2025 14:51:25 GMT+0530 (India Standard Time)',
@@ -286,7 +288,7 @@ export const orderDummyData = [
         total: 214.2,
         status: "DELIVERED",
         userId: "user_31dQbH27HVtovbs13X2cmqefddM",
-        storeId: "cmemkqnzm000htat8u7n8cpte",
+
         addressId: "cmemm6g95001ftat8omv9b883",
         isPaid: false,
         paymentMethod: "COD",
@@ -306,7 +308,7 @@ export const orderDummyData = [
         total: 421.6,
         status: "DELIVERED",
         userId: "user_31dQbH27HVtovbs13X2cmqefddM",
-        storeId: "cmemkqnzm000htat8u7n8cpte",
+
         addressId: "cmemm6g95001ftat8omv9b883",
         isPaid: false,
         paymentMethod: "COD",
@@ -382,11 +384,4 @@ export const dummyAdminDashboardData = {
         { "createdAt": "2025-08-25T11:56:29.713Z", "total": 36.1 },
         { "createdAt": "2025-08-25T11:30:29.713Z", "total": 110.1 }
     ]
-}
-
-export const dummyStoreDashboardData = {
-    "ratings": dummyRatingsData,
-    "totalOrders": 2,
-    "totalEarnings": 636,
-    "totalProducts": 5
 }

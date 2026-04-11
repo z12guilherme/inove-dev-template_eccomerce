@@ -41,22 +41,28 @@ export const dbAdapter = {
     // PRODUTOS
     // ==========================================
     getProducts: async () => {
-        const db = getDB();
-        return db ? db.products : [];
+        // Produtos são gerenciados pelo Redux/productSlice e salvos em 'inove_products'
+        // ao invés do banco simulado '@inove_dev_db'
+        if (typeof window === 'undefined') return [];
+        const stored = localStorage.getItem('inove_products');
+        return stored ? JSON.parse(stored) : [];
     },
 
     getProductById: async (id) => {
-        const db = getDB();
-        return db ? db.products.find(p => p.id === id) : null;
+        if (typeof window === 'undefined') return null;
+        const stored = localStorage.getItem('inove_products');
+        const products = stored ? JSON.parse(stored) : [];
+        return products.find(p => p.id === id) || null;
     },
 
     createProduct: async (productData) => {
-        const db = getDB();
-        if (!db) return null;
+        if (typeof window === 'undefined') return null;
+        const stored = localStorage.getItem('inove_products');
+        const products = stored ? JSON.parse(stored) : [];
 
         const newProduct = { ...productData, id: `prod_${Date.now()}` };
-        db.products.push(newProduct);
-        saveDB(db);
+        products.push(newProduct);
+        localStorage.setItem('inove_products', JSON.stringify(products));
         return newProduct;
     },
 

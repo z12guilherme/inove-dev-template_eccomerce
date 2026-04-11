@@ -13,7 +13,7 @@ export default function About() {
                 {/* Imagem (Hero / Store) */}
                 <div className="w-full lg:w-1/2 relative bg-slate-100 rounded-3xl overflow-hidden shadow-md aspect-[4/3] lg:aspect-square group">
                     <Image
-                        src={assets.happy_store}
+                        src={assets.logo}
                         alt="Equipe INOVE-DEV"
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-700"

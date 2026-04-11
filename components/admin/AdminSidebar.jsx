@@ -18,7 +18,6 @@ const AdminSidebar = () => {
         { name: 'Produtos', href: '/admin/manage-products', icon: PackageIcon },
         { name: 'Rodapé', href: '/admin/footer-settings', icon: PanelBottomIcon },
         { name: 'Aparência', href: '/admin/appearance', icon: SwatchBookIcon },
-        { name: 'Configurações', href: '/admin/settings', icon: SettingsIcon },
     ]
 
 

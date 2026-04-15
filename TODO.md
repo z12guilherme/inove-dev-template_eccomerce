@@ -44,5 +44,12 @@ Este documento lista as melhorias e tarefas necessárias para transformar o temp
 - [x] **Motor de Variações de Produtos:** Expandir o formulário de cadastro de produtos para permitir N variações do mesmo item (ex: Cor: Preto/Branco | Tamanho: P/M/G) com gestão de estoque/preço individual por variação.
 - [ ] *[Postergado]* Persistência em Nuvem (Trabalharemos 100% com LocalStorage/Redux por enquanto até termos um Backend).
 
+## 🚀 Fase 7: Features de E-commerce (Profissionalização)
+- [x] **Integração Real de Cupons na Vitrine:** Conectar a tela de Checkout/Carrinho ao gerenciador de cupons local para abater porcentagem do total de forma dinâmica.
+- [x] **Fluxo de Sistema de Avaliações (Reviews):** Adicionar um modal/botão na tela do `ProductDetails` onde o usuário possa escrever um comentário, dar estrelas e persistir isso (simuladamente) no localStorage para então ser renderizado no momento para os outros usuários.
+- [x] **Busca Global Mapeada na Navbar:** Fazer o formulário de pesquisa da `Navbar` redirecionar e carregar a query string para a página `/shop?q=xxx`, e garantir que a página Shop respeite e filtre baseado no Redux os produtos com aquele título/descrição.
+- [x] **Filtros Avançados Inteligentes:** Na página de `shop`, plugar e fazer funcionarem as categorias da lateral esqueda e o controle de range financeiro.
+- [x] **Aviso de Estoque Limítrofe:** Incorporar uma checagem de `.inStock` no frontend (ProductDetails e Carrinho). Bloquear botão quando "Esgotado".
+
 ---
 *💡 Foco: Construir uma loja rápida, segura, responsiva e pronta para ser entregue para o cliente final da INOVE-DEV sem dor de cabeça, permitindo total controle visual.*

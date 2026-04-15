@@ -4,7 +4,7 @@ import AddressModal from './AddressModal';
 import { useSelector, useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { deleteItemFromCart } from "@/lib/features/cart/cartSlice";
+import { deleteItemFromCart, setCoupon, removeCoupon } from "@/lib/features/cart/cartSlice";
 import { dbAdapter } from "../dbAdapter";
 
 const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
@@ -20,7 +20,7 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [showAddressModal, setShowAddressModal] = useState(false);
     const [couponCodeInput, setCouponCodeInput] = useState('');
-    const [coupon, setCoupon] = useState('');
+    const coupon = useSelector(state => state.cart.appliedCoupon);
 
     const handleCouponCode = async (event) => {
         event.preventDefault();
@@ -37,7 +37,7 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
             const validCoupon = await dbAdapter.getCouponByCode(couponCodeInput);
 
             if (validCoupon) {
-                setCoupon(validCoupon);
+                dispatch(setCoupon(validCoupon));
                 toast.success('Cupom aplicado com sucesso!', { id: toastId });
             } else {
                 toast.error('Cupom inválido ou expirado.', { id: toastId });
@@ -174,7 +174,7 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
                         <div className='w-full flex items-center justify-center gap-2 text-xs mt-2'>
                             <p>Código: <span className='font-semibold ml-1'>{coupon.code.toUpperCase()}</span></p>
                             <p>{coupon.description}</p>
-                            <XIcon size={18} onClick={() => setCoupon('')} className='hover:text-red-700 transition cursor-pointer' />
+                            <XIcon size={18} onClick={() => dispatch(removeCoupon())} className='hover:text-red-700 transition cursor-pointer' />
                         </div>
                     )
                 }

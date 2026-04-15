@@ -26,13 +26,25 @@ export default function Cart() {
         setTotalPrice(0);
         const cartArray = [];
         for (const [key, value] of Object.entries(cartItems)) {
-            const product = products.find(product => product.id === key);
+            const [productId, variantKey] = key.split('|');
+            const product = products.find(p => p.id === productId);
             if (product) {
+                let currentVariant = null;
+                if (variantKey && product.variants) {
+                    currentVariant = product.variants.find(v => v.stringKey === variantKey);
+                }
+
+                const price = currentVariant ? currentVariant.price : product.price;
+                const displayName = currentVariant ? `${product.name} (${variantKey})` : product.name;
+
                 cartArray.push({
                     ...product,
+                    cartItemId: key, // The exact key to be referenced by Counter slices
+                    name: displayName,
+                    price: price,
                     quantity: value,
                 });
-                setTotalPrice(prev => prev + product.price * value);
+                setTotalPrice(prev => prev + price * value);
             }
         }
         setCartArray(cartArray);
@@ -82,11 +94,11 @@ export default function Cart() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-5 text-center">
-                                                <Counter productId={item.id} />
+                                                <Counter productId={item.cartItemId} />
                                             </td>
-                                            <td className="px-6 py-5 text-center font-medium text-slate-700 text-lg">{currency}{(item.price * item.quantity).toLocaleString()}</td>
+                                            <td className="px-6 py-5 text-center font-medium text-slate-700 text-lg">{currency}{(item.price * item.quantity).toFixed(2)}</td>
                                             <td className="px-6 py-5 text-center max-md:hidden">
-                                                <button onClick={() => handleDeleteItemFromCart(item.id)} className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-full transition-colors inline-flex justify-center items-center">
+                                                <button onClick={() => handleDeleteItemFromCart(item.cartItemId)} className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-full transition-colors inline-flex justify-center items-center">
                                                     <Trash2Icon size={20} />
                                                 </button>
                                             </td>

@@ -7,6 +7,8 @@
     --brand-primary-mid: #86efac;  /* green-300  */
     --brand-primary-dark: #15803d; /* green-700  */
     --brand-accent: #1e293b;       /* slate-800  */
+    --font-primary: 'Inter', sans-serif;
+    --radius-global: 0.5rem;
 }
 
 /* Expõe as variáveis como utilitários Tailwind */
@@ -16,6 +18,11 @@
     --color-brand-mid: var(--brand-primary-mid);
     --color-brand-dark: var(--brand-primary-dark);
     --color-accent: var(--brand-accent);
+    --font-sans: var(--font-primary);
+    --radius-xl: calc(var(--radius-global) + 4px);
+    --radius-lg: var(--radius-global);
+    --radius-md: calc(var(--radius-global) - 2px);
+    --radius-sm: calc(var(--radius-global) - 4px);
 }
 
 @layer components {
@@ -30,6 +37,9 @@
 }
 
 @layer base {
+    body {
+        font-family: var(--font-primary);
+    }
     button {
         cursor: pointer;
     }
@@ -45,7 +55,7 @@
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
+    border-radius: var(--radius-global);
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
     background-color: white;

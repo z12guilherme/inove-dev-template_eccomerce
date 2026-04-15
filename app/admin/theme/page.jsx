@@ -149,6 +149,53 @@ export default function ThemeSettings() {
                 </div>
             </div>
 
+            {/* Tipografia e Formato */}
+            <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6 mb-6">
+                <h2 className="text-slate-700 font-medium mb-5 text-sm uppercase tracking-wider">Tipografia & Geometria</h2>
+                
+                {/* Fonte Principal */}
+                <div className="mb-6">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Família de Fonte</label>
+                    <select
+                        value={theme.fontPrimary || 'Inter'}
+                        onChange={e => handleChange('fontPrimary', e.target.value)}
+                        className="w-full max-w-sm p-2.5 border border-slate-200 rounded-lg outline-none focus:border-green-500 text-sm text-slate-700"
+                    >
+                        <option value="Inter">Inter (Design Moderno)</option>
+                        <option value="Roboto">Roboto (Clássica do Google)</option>
+                        <option value="Outfit">Outfit (Tecnológica e Limpa)</option>
+                        <option value="Playfair Display">Playfair Display (Luxo / Serif)</option>
+                        <option value="Merriweather">Merriweather (Clássica Serif)</option>
+                    </select>
+                    <p className="mt-1.5 text-xs text-slate-400">Ao selecionar, a fonte é importada automaticamente do Google Fonts.</p>
+                </div>
+
+                {/* Arredondamento */}
+                <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-3">Arredondamento Padrão de Bordas</label>
+                    <div className="flex flex-wrap gap-4">
+                        {[
+                            { label: 'Quadradas', value: '0rem' },
+                            { label: 'Suaves', value: '0.25rem' },
+                            { label: 'Padrão', value: '0.5rem' },
+                            { label: 'Arredondadas', value: '1rem' },
+                        ].map(border => {
+                            const isSelected = theme.borderRadius === border.value || (!theme.borderRadius && border.value === '0.5rem')
+                            return (
+                                <button
+                                    key={border.value}
+                                    onClick={() => handleChange('borderRadius', border.value)}
+                                    className={`px-5 py-3 border text-sm transition shadow-sm ${isSelected ? 'border-green-500 bg-green-50 text-green-700 font-medium ring-2 ring-green-100' : 'border-slate-200 hover:border-slate-300 text-slate-600 bg-white'}`}
+                                    style={{ borderRadius: border.value }}
+                                >
+                                    {border.label}
+                                </button>
+                            )
+                        })}
+                    </div>
+                </div>
+            </div>
+
             {/* Preview */}
             <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
                 <h2 className="text-slate-700 font-medium mb-5 text-sm uppercase tracking-wider">Pré-visualização</h2>

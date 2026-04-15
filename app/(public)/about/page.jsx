@@ -1,10 +1,20 @@
-import React from 'react'
+'use client'
+import React, { useState, useEffect } from 'react'
 import PageTitle from '@/components/PageTitle'
 import Image from 'next/image'
 import { assets } from '@/assets/assets'
 import { TargetIcon, ShieldCheckIcon, ZapIcon } from 'lucide-react'
+import { dbAdapter } from '@/dbAdapter'
 
 export default function About() {
+    const [pageData, setPageData] = useState(null)
+
+    useEffect(() => {
+        dbAdapter.getPageContent('about').then(setPageData)
+    }, [])
+
+    if (!pageData) return <div className="min-h-screen p-12 text-center text-slate-400">Carregando história...</div>
+
     return (
         <div className="max-w-7xl mx-auto px-6 py-10 min-h-[70vh] text-slate-800 pb-20">
             <PageTitle heading="Sobre Nós" text="Conheça a nossa história" linkText="Ir para a loja" path="/shop" />
@@ -27,21 +37,15 @@ export default function About() {
 
                 {/* Texto e Conteúdo */}
                 <div className="w-full lg:w-1/2 space-y-6 text-slate-600 leading-relaxed">
-                    <h2 className="text-3xl sm:text-4xl font-semibold text-slate-800 mb-6 leading-tight">
-                        Inovação e Tecnologia em um <span className="text-green-500">só lugar.</span>
+                    <h2 className="text-3xl sm:text-4xl font-semibold text-slate-800 mb-6 leading-tight whitespace-pre-wrap">
+                        {pageData.title}
                     </h2>
 
-                    <p className="text-lg font-medium text-slate-700">
-                        Bem-vindo à INOVE-DEV, o seu destino definitivo para os gadgets mais recentes e inteligentes do mercado.
-                    </p>
-
-                    <p>
-                        Nossa missão é trazer inovações tecnológicas e produtos essenciais diretamente para você, com foco absoluto em qualidade, design moderno e preços acessíveis. De smartphones de última geração a smartwatches e acessórios para casa inteligente, reunimos o melhor do mundo tech.
-                    </p>
-
-                    <p>
-                        Acreditamos que fazer compras deve ser simples, inteligente e satisfatório. Por isso, nossa plataforma foi construída pensando na melhor experiência possível, garantindo segurança extrema desde a escolha do produto até a entrega rápida na porta da sua casa.
-                    </p>
+                    {pageData.paragraphs.split('\n\n').map((paragraph, index) => (
+                        <p key={index} className={index === 0 ? "text-lg font-medium text-slate-700" : ""}>
+                            {paragraph}
+                        </p>
+                    ))}
 
                     {/* Badges/Valores */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-10 pt-8 border-t border-slate-200">

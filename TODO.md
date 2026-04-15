@@ -36,5 +36,13 @@ Este documento lista as melhorias e tarefas necessárias para transformar o temp
 - [ ] Limpeza de código morto e pacotes não utilizados (ex: pasta `/store`).
 - [ ] Deploy oficial na plataforma (Ex: **Vercel**).
 
+## 🛠️ Fase 6: Personalização Avançada pelo Lojista (CMS & Construtor)
+- [x] **Motor Tipográfico e Design Global:** Adicionar controles para selecionar fontes do Google Fonts dinamicamente e gerenciar o `border-radius` em todas as bordas da aplicação (Concluído!).
+- [x] **Construtor Dinâmico da Home - Admin:** Criar interface em `/admin/home-layout` para arrastar, habilitar/desabilitar e alterar a ordem das seções (ex: Banner Principal, Produtos Destaques, Grade de Categorias).
+- [x] **Motor de Renderização da Home:** Refatorar `app/(public)/page.jsx` para ler a estrutura dinâmica definida no Admin e renderizar os componentes na ordem correta, abandonando o layout fixo.
+- [x] **Gestão de Páginas Secundárias (Predefinidas):** Criar editor simples em `/admin/pages` para atualizar textos de páginas já existentes (ex: `/about`, `/contact`, `/faq`), alimentado pelo localStorage no momento.
+- [x] **Motor de Variações de Produtos:** Expandir o formulário de cadastro de produtos para permitir N variações do mesmo item (ex: Cor: Preto/Branco | Tamanho: P/M/G) com gestão de estoque/preço individual por variação.
+- [ ] *[Postergado]* Persistência em Nuvem (Trabalharemos 100% com LocalStorage/Redux por enquanto até termos um Backend).
+
 ---
-*💡 Foco: Construir uma loja rápida, segura, responsiva e pronta para ser entregue para o cliente final da INOVE-DEV sem dor de cabeça.*
+*💡 Foco: Construir uma loja rápida, segura, responsiva e pronta para ser entregue para o cliente final da INOVE-DEV sem dor de cabeça, permitindo total controle visual.*

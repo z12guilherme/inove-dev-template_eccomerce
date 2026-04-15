@@ -3,13 +3,22 @@ import React from 'react'
 import PageTitle from '@/components/PageTitle'
 import toast from 'react-hot-toast'
 import { MailIcon, PhoneIcon, MapPinIcon } from 'lucide-react'
+import { dbAdapter } from '@/dbAdapter'
 
 export default function Contact() {
+    const [pageData, setPageData] = useState(null)
+
+    useEffect(() => {
+        dbAdapter.getPageContent('contact').then(setPageData)
+    }, [])
+
     const handleSubmit = (e) => {
         e.preventDefault()
         toast.success('Mensagem enviada com sucesso! Retornaremos em breve.')
         e.target.reset() // Limpa o formulário após o "envio"
     }
+
+    if (!pageData) return <div className="min-h-screen p-12 text-center text-slate-400">Carregando contatos...</div>
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-10 min-h-[60vh]">
@@ -22,15 +31,15 @@ export default function Contact() {
                     <div className="space-y-6 text-slate-600">
                         <div className="flex items-center gap-4">
                             <div className="bg-green-50 p-3 rounded-full text-green-600"><MapPinIcon size={24} /></div>
-                            <p>Av. Paulista, 1000, Bela Vista, São Paulo, SP</p>
+                            <p>{pageData.address}</p>
                         </div>
                         <div className="flex items-center gap-4">
                             <div className="bg-green-50 p-3 rounded-full text-green-600"><PhoneIcon size={24} /></div>
-                            <p>+55 11 98765-4321</p>
+                            <p>{pageData.phone}</p>
                         </div>
                         <div className="flex items-center gap-4">
                             <div className="bg-green-50 p-3 rounded-full text-green-600"><MailIcon size={24} /></div>
-                            <p>contato@inove-dev.com</p>
+                            <p>{pageData.email}</p>
                         </div>
                     </div>
                 </div>

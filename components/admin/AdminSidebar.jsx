@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from "next/navigation"
-import { HomeIcon, TicketPercentIcon, PackageIcon, LayersIcon, LayoutListIcon, SettingsIcon, PanelBottomIcon, SwatchBookIcon } from "lucide-react"
+import { HomeIcon, TicketPercentIcon, PackageIcon, LayersIcon, LayoutListIcon, SettingsIcon, PanelBottomIcon, SwatchBookIcon, FileTextIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { assets } from "@/assets/assets"
@@ -17,7 +17,10 @@ const AdminSidebar = () => {
         { name: 'Cupons', href: '/admin/coupons', icon: TicketPercentIcon  },
         { name: 'Produtos', href: '/admin/manage-products', icon: PackageIcon },
         { name: 'Rodapé', href: '/admin/footer-settings', icon: PanelBottomIcon },
-        { name: 'Aparência', href: '/admin/appearance', icon: SwatchBookIcon },
+        { name: 'Institucional', href: '/admin/pages', icon: FileTextIcon },
+        { name: 'Geral (Banners)', href: '/admin/appearance', icon: SwatchBookIcon },
+        { name: 'Layout Home', href: '/admin/home-layout', icon: LayoutListIcon },
+        { name: 'Visual/Tema', href: '/admin/theme', icon: SwatchBookIcon },
     ]
 
 

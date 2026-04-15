@@ -178,4 +178,63 @@ export const dbAdapter = {
         db.footerSettings = settings;
         saveDB(db);
     },
+
+    // ==========================================
+    // LAYOUT DA HOME PAGE
+    // ==========================================
+    getHomeLayout: async () => {
+        const db = getDB();
+        if (!db || !db.homeLayout) {
+            return [
+                { id: 'hero', name: 'Banner Principal', visible: true, order: 1 },
+                { id: 'latest_products', name: 'Últimos Produtos', visible: true, order: 2 },
+                { id: 'best_selling', name: 'Mais Vendidos', visible: true, order: 3 },
+                { id: 'our_specs', name: 'Nossos Diferenciais', visible: true, order: 4 },
+                { id: 'newsletter', name: 'Captura de E-mails', visible: true, order: 5 },
+            ];
+        }
+        return db.homeLayout;
+    },
+
+    saveHomeLayout: async (layout) => {
+        const db = getDB();
+        if (!db) return;
+        db.homeLayout = layout;
+        saveDB(db);
+    },
+
+    // ==========================================
+    // PÁGINAS INSTITUCIONAIS (CMS)
+    // ==========================================
+    getPageContent: async (slug) => {
+        const db = getDB();
+        if (!db) return null;
+        
+        if (!db.pages) db.pages = {};
+        if (!db.pages[slug]) {
+            if (slug === 'about') {
+                return {
+                    title: "Inovação e Tecnologia em um só lugar.",
+                    paragraphs: "Bem-vindo à INOVE-DEV, o seu destino definitivo para os gadgets mais recentes e inteligentes do mercado.\n\nNossa missão é trazer inovações tecnológicas e produtos essenciais diretamente para você, com foco absoluto em qualidade, design moderno e preços acessíveis. De smartphones de última geração a smartwatches e acessórios para casa inteligente, reunimos o melhor do mundo tech.\n\nAcreditamos que fazer compras deve ser simples, inteligente e satisfatório. Por isso, nossa plataforma foi construída pensando na melhor experiência possível, garantindo segurança extrema desde a escolha do produto até a entrega rápida na porta da sua casa."
+                };
+            }
+            if (slug === 'contact') {
+                return {
+                    address: "Av. Paulista, 1000, Bela Vista, São Paulo, SP",
+                    phone: "+55 11 98765-4321",
+                    email: "contato@inove-dev.com"
+                };
+            }
+            return null;
+        }
+        return db.pages[slug];
+    },
+
+    savePageContent: async (slug, content) => {
+        const db = getDB();
+        if (!db) return;
+        if (!db.pages) db.pages = {};
+        db.pages[slug] = content;
+        saveDB(db);
+    },
 };

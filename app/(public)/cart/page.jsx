@@ -12,7 +12,7 @@ import Link from "next/link";
 export default function Cart() {
 
     const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || 'R$';
-    
+
     const { cartItems } = useSelector(state => state.cart);
     const products = useSelector(state => state.product.list);
 
@@ -35,12 +35,12 @@ export default function Cart() {
                 }
 
                 const price = currentVariant ? currentVariant.price : product.price;
-                const displayName = currentVariant ? `${product.name} (${variantKey})` : product.name;
 
                 cartArray.push({
                     ...product,
                     cartItemId: key, // The exact key to be referenced by Counter slices
-                    name: displayName,
+                    name: product.name,
+                    variantKey: variantKey || null,
                     price: price,
                     quantity: value,
                 });
@@ -89,6 +89,11 @@ export default function Cart() {
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="font-medium text-slate-800 text-base max-sm:text-sm">{item.name}</span>
+                                                    {item.variantKey && (
+                                                        <span className="text-xs text-slate-500 mt-1 bg-white border border-slate-200 w-fit px-2 py-0.5 rounded shadow-sm">
+                                                            {item.variantKey}
+                                                        </span>
+                                                    )}
                                                     <span className="text-xs text-slate-400 mt-1">{item.category}</span>
                                                     <span className="text-sm font-semibold text-slate-600 mt-1.5">{currency}{item.price}</span>
                                                 </div>
@@ -108,7 +113,7 @@ export default function Cart() {
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <div className="w-full lg:w-[400px] flex flex-col gap-6">
                         <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
                             <ShippingCalculator onShippingCalculated={setShippingCost} />

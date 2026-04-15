@@ -31,8 +31,11 @@ const OrderItem = ({ order }) => {
                                 </div>
                                 <div className="flex flex-col justify-center text-sm">
                                     <p className="font-medium text-slate-600 text-base">{item.product.name}</p>
-                                    <p>{currency}{item.price} Qtd : {item.quantity} </p>
-                                    <p className="mb-1">{new Date(order.createdAt).toDateString()}</p>
+                                    {item.variantKey && (
+                                        <p className="text-xs text-slate-500 bg-white border border-slate-200 shadow-sm w-fit px-2 py-0.5 rounded mt-1 mb-1">{item.variantKey}</p>
+                                    )}
+                                    <p className="mt-1">{currency}{item.price} Qtd : {item.quantity} </p>
+                                    <p className="mb-1 text-xs text-slate-400">{new Date(order.createdAt).toDateString()}</p>
                                     <div>
                                         {ratings.find(rating => order.id === rating.orderId && item.product.id === rating.productId)
                                             ? <Rating value={ratings.find(rating => order.id === rating.orderId && item.product.id === rating.productId).rating} />

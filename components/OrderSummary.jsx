@@ -35,7 +35,7 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
         try {
             await new Promise(resolve => setTimeout(resolve, 800)); // Simula requisição rápida
             const validCoupon = await dbAdapter.getCouponByCode(couponCodeInput);
-            
+
             if (validCoupon) {
                 setCoupon(validCoupon);
                 toast.success('Cupom aplicado com sucesso!', { id: toastId });
@@ -64,7 +64,7 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
 
         // Simulando tempo de resposta de um Gateway de Pagamento
         await new Promise(resolve => setTimeout(resolve, 1500));
-        
+
         // Montando o objeto do pedido com dados reais do endereço
         const orderData = {
             total: finalTotal,
@@ -80,6 +80,7 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
                 productId: item.id,
                 quantity: item.quantity,
                 price: item.price,
+                variantKey: item.variantKey || null,
                 product: { id: item.id, name: item.name, category: item.category, image: item.images?.[0] || null }
             })),
             address: selectedAddress
@@ -165,7 +166,7 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
                 </div>
                 {
                     !coupon ? (
-                    <form onSubmit={handleCouponCode} className='flex justify-center gap-3 mt-3'>
+                        <form onSubmit={handleCouponCode} className='flex justify-center gap-3 mt-3'>
                             <input onChange={(e) => setCouponCodeInput(e.target.value)} value={couponCodeInput} type="text" placeholder='Código do Cupom' className='border border-slate-400 p-1.5 rounded w-full outline-none' />
                             <button className='bg-slate-600 text-white px-3 rounded hover:bg-slate-800 active:scale-95 transition-all'>Aplicar</button>
                         </form>

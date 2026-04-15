@@ -123,7 +123,8 @@ CREATE TABLE public.order_items (
   order_id   UUID    REFERENCES public.orders(id) ON DELETE CASCADE,
   product_id UUID    REFERENCES public.products(id) ON DELETE RESTRICT,
   quantity   INTEGER NOT NULL CHECK (quantity > 0),
-  price      NUMERIC(10, 2) NOT NULL -- Preço unitário no momento da compra (snapshot)
+  price      NUMERIC(10, 2) NOT NULL, -- Preço unitário no momento da compra (snapshot)
+  variant_key TEXT    -- Nome da variação selecionada (ex: P / Azul)
 );
 
 -- ========================================================================================

@@ -102,5 +102,5 @@ Desenvolvido e mantido por **Inove Dev**. Uma solução sob medida focada em esc
 ---
 
 ### 🏆 Créditos
-Este boilerplate e modelo de E-commerce foi originalmente inspirado no framework e interface do projeto open source **GoCart**, construído pela comunidade.
-Você pode encontrar e apoiar o repositório formador da base em: [GreatStackDev / gocart](https://github.com/GreatStackDev/gocart).
+Este boilerplate e modelo de E-commerce foi originalmente inspirado no framework e interface do projeto open source **Inove Dev**, construído pela comunidade.
+Você pode encontrar e apoiar o repositório formador da base em: [GreatStackDev / Inove Dev](https://github.com/GreatStackDev/Inove Dev).

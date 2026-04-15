@@ -7,6 +7,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Counter from "./Counter";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const ProductDetails = ({ product }) => {
 
@@ -65,6 +66,11 @@ const ProductDetails = ({ product }) => {
 
     const addToCartHandler = () => {
         dispatch(addToCart({ productId: finalItemId }))
+        toast.success(`${product.name} no carrinho!`, {
+            icon: '🛒',
+            duration: 3000,
+            position: 'top-center',
+        });
     }
 
     const averageRating = product.rating?.length ? product.rating.reduce((acc, item) => acc + item.rating, 0) / product.rating.length : 0;

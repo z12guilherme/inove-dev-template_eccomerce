@@ -18,7 +18,7 @@ const OrderItem = ({ order }) => {
             <tr className="text-sm">
                 <td className="text-left">
                     <div className="flex flex-col gap-6">
-                        {order.orderItems.map((item, index) => (
+                        {(order.order_items || order.orderItems).map((item, index) => (
                             <div key={index} className="flex items-center gap-4">
                                 <div className="w-20 aspect-square bg-slate-100 flex items-center justify-center rounded-md">
                                     <Image

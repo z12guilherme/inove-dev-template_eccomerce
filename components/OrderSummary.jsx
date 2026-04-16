@@ -62,6 +62,18 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
 
         const toastId = toast.loading('Processando Pagamento...');
 
+        // 1. Buscar dados de geolocalização do IP a partir da nossa API interna
+        let ipData = null;
+        try {
+            const ipResponse = await fetch('/api/ip-geo'); // Chama a nova API route
+            if (ipResponse.ok) {
+                ipData = await ipResponse.json();
+            }
+        } catch (error) {
+            console.error("Erro ao buscar dados de geolocalização do IP:", error);
+            // A falha em buscar o IP não deve impedir a compra, o processo continua.
+        }
+
         // Simulando tempo de resposta de um Gateway de Pagamento
         await new Promise(resolve => setTimeout(resolve, 1500));
 
@@ -69,14 +81,18 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
         const orderData = {
             total: finalTotal,
             status: "confirmed",
-            customerName: selectedAddress.name,
-            customerEmail: selectedAddress.email,
+            customer_name: selectedAddress.name,
+            customer_email: selectedAddress.email,
             paymentMethod: paymentMethod,
             isCouponUsed: !!coupon,
             couponCode: coupon?.code || null,
             discountAmount: discountAmount,
             shippingCost: shippingCost,
-            orderItems: items.map(item => ({
+            order_location_city: ipData?.city || null,
+            order_location_region: ipData?.region || null,
+            order_location_country: ipData?.country || null,
+            order_location_is_vpn: ipData?.is_vpn || false,
+            order_items: items.map(item => ({
                 productId: item.id,
                 quantity: item.quantity,
                 price: item.price,
@@ -87,10 +103,10 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
         };
 
         try {
-            // 1. Salva o pedido no banco de dados simulado
+            // 2. Salva o pedido no banco de dados simulado
             const savedOrder = await dbAdapter.createOrder(orderData);
 
-            // 2. Guarda o ID do pedido para exibir na tela de sucesso
+            // 3. Guarda o ID do pedido para exibir na tela de sucesso
             sessionStorage.setItem('last_order_id', savedOrder.id);
             sessionStorage.setItem('last_order_customer', selectedAddress.name);
 

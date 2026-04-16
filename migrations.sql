@@ -95,6 +95,12 @@ CREATE TABLE public.orders (
   customer_name   TEXT,
   customer_email  TEXT,
 
+  -- Localização do pedido (via IP Intelligence API)
+  order_location_city    TEXT,
+  order_location_region  TEXT,
+  order_location_country TEXT,
+  order_location_is_vpn  BOOLEAN,
+
   -- Pagamento
   payment_method  TEXT NOT NULL CHECK (payment_method IN ('PIX', 'STRIPE')),
   total           NUMERIC(10, 2) NOT NULL,

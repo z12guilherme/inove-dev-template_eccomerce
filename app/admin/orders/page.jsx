@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { dbAdapter } from '../../../dbAdapter'
-import { Trash2Icon, ChevronDownIcon, ChevronUpIcon, MapPinIcon, PhoneIcon, MailIcon, TagIcon, TruckIcon, ReceiptIcon } from 'lucide-react'
+import { Trash2Icon, ChevronDownIcon, ChevronUpIcon, MapPinIcon, PhoneIcon, MailIcon, TagIcon, TruckIcon, ReceiptIcon, GlobeIcon, ShieldAlertIcon } from 'lucide-react'
 
 const STATUS_STYLES = {
     pending:   'bg-yellow-50 border-yellow-200 text-yellow-700',
@@ -21,7 +21,7 @@ function OrderDetailRow({ order, currency }) {
     return (
         <tr>
             <td colSpan={8} className="px-0 py-0 border-b border-slate-100">
-                <div className="bg-slate-50/80 border-t border-slate-100 px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                <div className="bg-slate-50/80 border-t border-slate-100 px-6 py-5 grid grid-cols-1 md:grid-cols-4 gap-6 text-sm">
 
                     {/* Endereço de entrega */}
                     <div>
@@ -73,6 +73,26 @@ function OrderDetailRow({ order, currency }) {
                                 </div>
                             ))}
                         </div>
+                    </div>
+
+                    {/* Informações de IP / Inteligência */}
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
+                            <GlobeIcon size={13} /> IP Intelligence
+                        </p>
+                        {order.order_location_city || order.order_location_region || order.order_location_country ? (
+                            <div className="flex flex-col gap-1">
+                                <p className="font-medium text-slate-800">{order.order_location_city || 'Cidade N/D'}</p>
+                                <p className="text-slate-500">{order.order_location_region}{order.order_location_country ? `, ${order.order_location_country}` : ''}</p>
+                                {order.order_location_is_vpn && (
+                                    <span className="mt-2 flex items-center gap-1 text-[10px] bg-red-50 text-red-600 border border-red-100 px-2 py-0.5 rounded-full w-fit font-bold uppercase tracking-tight">
+                                        <ShieldAlertIcon size={10} /> VPN / Proxy Detectado
+                                    </span>
+                                )}
+                            </div>
+                        ) : (
+                            <p className="text-slate-400 italic text-xs">Informações de geolocalização não disponíveis para este pedido.</p>
+                        )}
                     </div>
 
                     {/* Resumo financeiro */}
@@ -214,6 +234,11 @@ export default function ManageOrders() {
                                             <p className="font-medium text-slate-800">
                                                 {order.customerName || order.address?.name || '—'}
                                             </p>
+                                            {order.order_location_is_vpn && (
+                                                <span className="inline-flex items-center gap-0.5 text-[9px] bg-red-100 text-red-700 font-bold px-1.5 py-0.5 rounded-sm uppercase mt-1">
+                                                    <ShieldAlertIcon size={8} /> VPN Detectada
+                                                </span>
+                                            )}
                                             <p className="text-xs text-slate-400">
                                                 {order.customerEmail || order.address?.email || ''}
                                             </p>

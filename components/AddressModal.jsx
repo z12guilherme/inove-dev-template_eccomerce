@@ -14,6 +14,7 @@ const AddressModal = ({ setShowAddressModal }) => {
         name: '',
         email: '',
         street: '',
+        neighborhood: '',
         city: '',
         state: '',
         zip: '',
@@ -21,11 +22,32 @@ const AddressModal = ({ setShowAddressModal }) => {
         phone: ''
     })
 
-    const handleAddressChange = (e) => {
-        setAddress({
-            ...address,
-            [e.target.name]: e.target.value
-        })
+    const handleAddressChange = async (e) => {
+        const { name, value } = e.target;
+        
+        setAddress(prev => ({
+            ...prev,
+            [name]: value
+        }));
+
+        if (name === 'zip' && value.replace(/\D/g, '').length === 8) {
+            try {
+                const cep = value.replace(/\D/g, '');
+                const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setAddress(prev => ({
+                        ...prev,
+                        street: data.street || prev.street,
+                        neighborhood: data.neighborhood || prev.neighborhood,
+                        city: data.city || prev.city,
+                        state: data.state || prev.state,
+                    }));
+                }
+            } catch (error) {
+                console.error("Erro ao buscar CEP:", error);
+            }
+        }
     }
 
     const handleSubmit = async (e) => {
@@ -74,6 +96,27 @@ const AddressModal = ({ setShowAddressModal }) => {
                         placeholder="Telefone / WhatsApp"
                         required
                     />
+                    <div className="flex gap-3">
+                        <input
+                            name="zip"
+                            onChange={handleAddressChange}
+                            value={address.zip}
+                            className="p-2.5 px-4 outline-none border border-slate-200 rounded-lg w-full focus:border-green-500 transition text-sm"
+                            type="text"
+                            placeholder="CEP (somente números)"
+                            maxLength={8}
+                            required
+                        />
+                        <input
+                            name="country"
+                            onChange={handleAddressChange}
+                            value={address.country}
+                            className="p-2.5 px-4 outline-none border border-slate-200 rounded-lg w-full focus:border-green-500 transition text-sm"
+                            type="text"
+                            placeholder="País"
+                            required
+                        />
+                    </div>
                     <input
                         name="street"
                         onChange={handleAddressChange}
@@ -81,6 +124,15 @@ const AddressModal = ({ setShowAddressModal }) => {
                         className="p-2.5 px-4 outline-none border border-slate-200 rounded-lg w-full focus:border-green-500 transition text-sm"
                         type="text"
                         placeholder="Rua, número e complemento"
+                        required
+                    />
+                     <input
+                        name="neighborhood"
+                        onChange={handleAddressChange}
+                        value={address.neighborhood}
+                        className="p-2.5 px-4 outline-none border border-slate-200 rounded-lg w-full focus:border-green-500 transition text-sm"
+                        type="text"
+                        placeholder="Bairro"
                         required
                     />
                     <div className="flex gap-3">
@@ -101,27 +153,6 @@ const AddressModal = ({ setShowAddressModal }) => {
                             type="text"
                             placeholder="UF"
                             maxLength={2}
-                            required
-                        />
-                    </div>
-                    <div className="flex gap-3">
-                        <input
-                            name="zip"
-                            onChange={handleAddressChange}
-                            value={address.zip}
-                            className="p-2.5 px-4 outline-none border border-slate-200 rounded-lg w-full focus:border-green-500 transition text-sm"
-                            type="text"
-                            placeholder="CEP (somente números)"
-                            maxLength={8}
-                            required
-                        />
-                        <input
-                            name="country"
-                            onChange={handleAddressChange}
-                            value={address.country}
-                            className="p-2.5 px-4 outline-none border border-slate-200 rounded-lg w-full focus:border-green-500 transition text-sm"
-                            type="text"
-                            placeholder="País"
                             required
                         />
                     </div>

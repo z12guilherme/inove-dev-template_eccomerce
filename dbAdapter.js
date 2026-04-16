@@ -60,7 +60,14 @@ export const dbAdapter = {
         const stored = localStorage.getItem('inove_products');
         const products = stored ? JSON.parse(stored) : [];
 
-        const newProduct = { ...productData, id: `prod_${Date.now()}` };
+        const newProduct = { 
+            ...productData, 
+            id: `prod_${Date.now()}`,
+            weight: Number(productData.weight) || 0,
+            height: Number(productData.height) || 0,
+            width: Number(productData.width) || 0,
+            length: Number(productData.length) || 0
+        };
         products.push(newProduct);
         localStorage.setItem('inove_products', JSON.stringify(products));
         return newProduct;
@@ -176,6 +183,31 @@ export const dbAdapter = {
         const db = getDB();
         if (!db) return;
         db.footerSettings = settings;
+        saveDB(db);
+    },
+
+    // ==========================================
+    // CONFIGURAÇÕES DA LOJA (STORE SETTINGS)
+    // ==========================================
+    getStoreSettings: async () => {
+        const db = getDB();
+        if (!db || !db.storeSettings) {
+            return {
+                shippingOriginZip: '01310200',
+                superfreteToken: '',
+                defaultWeight: 1,
+                defaultHeight: 20,
+                defaultWidth: 20,
+                defaultLength: 20
+            };
+        }
+        return db.storeSettings;
+    },
+
+    saveStoreSettings: async (settings) => {
+        const db = getDB();
+        if (!db) return;
+        db.storeSettings = settings;
         saveDB(db);
     },
 

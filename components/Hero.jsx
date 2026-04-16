@@ -56,6 +56,7 @@ const Hero = () => {
                         className='sm:absolute bottom-0 right-0 md:right-10 w-full sm:max-w-sm'
                         src={assets.hero_model_img}
                         alt=""
+                        priority
                     />
                 </div>
 

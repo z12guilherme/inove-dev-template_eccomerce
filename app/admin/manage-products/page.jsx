@@ -46,6 +46,14 @@ export default function ManageProducts() {
         }))
         setEditVariantOptions(optionsForForm && optionsForForm.length > 0 ? optionsForForm : [{ name: 'Tamanho', values: '' }])
         setEditGeneratedVariants(product.variants || [])
+        // Novos campos de dimensões
+        setEditingProduct(prev => ({
+            ...prev,
+            weight: product.weight || '',
+            height: product.height || '',
+            width: product.width || '',
+            length: product.length || ''
+        }))
     }
 
     const handleResetDemo = () => {
@@ -146,6 +154,10 @@ export default function ManageProducts() {
             images: imageUrls,
             price: Number(editingProduct.price),
             mrp: Number(editingProduct.mrp),
+            weight: Number(editingProduct.weight) || 0,
+            height: Number(editingProduct.height) || 0,
+            width: Number(editingProduct.width) || 0,
+            length: Number(editingProduct.length) || 0,
             hasVariants: editHasVariants,
             variantOptions: editHasVariants ? finalVariantOptions : [],
             // Converte para número apenas na hora de salvar
@@ -262,6 +274,28 @@ export default function ManageProducts() {
                                 <div className="flex-1">
                                     <label className="block text-sm text-slate-600 mb-1">Preço c/ Desconto (R$)</label>
                                     <input type="number" step="0.01" name="price" value={editingProduct.price} onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })} className="w-full p-2 border border-slate-200 rounded outline-none focus:border-green-500" required />
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col gap-3">
+                                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Dimensões e Peso</p>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <label className="flex flex-col gap-1 text-xs text-slate-600">
+                                        Peso (kg)
+                                        <input type="number" step="0.01" value={editingProduct.weight} onChange={(e) => setEditingProduct({ ...editingProduct, weight: e.target.value })} className="p-2 border border-slate-200 rounded outline-none bg-white" required />
+                                    </label>
+                                    <label className="flex flex-col gap-1 text-xs text-slate-600">
+                                        Altura (cm)
+                                        <input type="number" value={editingProduct.height} onChange={(e) => setEditingProduct({ ...editingProduct, height: e.target.value })} className="p-2 border border-slate-200 rounded outline-none bg-white" required />
+                                    </label>
+                                    <label className="flex flex-col gap-1 text-xs text-slate-600">
+                                        Largura (cm)
+                                        <input type="number" value={editingProduct.width} onChange={(e) => setEditingProduct({ ...editingProduct, width: e.target.value })} className="p-2 border border-slate-200 rounded outline-none bg-white" required />
+                                    </label>
+                                    <label className="flex flex-col gap-1 text-xs text-slate-600">
+                                        Comprimento (cm)
+                                        <input type="number" value={editingProduct.length} onChange={(e) => setEditingProduct({ ...editingProduct, length: e.target.value })} className="p-2 border border-slate-200 rounded outline-none bg-white" required />
+                                    </label>
                                 </div>
                             </div>
                             <div>

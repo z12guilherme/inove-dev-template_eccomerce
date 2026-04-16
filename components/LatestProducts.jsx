@@ -8,12 +8,22 @@ const LatestProducts = () => {
 
     const displayQuantity = 4
     const products = useSelector(state => state.product.list)
+    const [isMounted, setIsMounted] = React.useState(false)
+
+    React.useEffect(() => {
+        setIsMounted(true)
+    }, [])
+
+    // Evita erro de hidratação (SSR vs Client) ao exibir a contagem de produtos
+    const description = isMounted 
+        ? `Mostrando ${products.length < displayQuantity ? products.length : displayQuantity} de ${products.length} produtos`
+        : "Carregando produtos..."
 
     return (
         <div className='px-6 my-30 max-w-6xl mx-auto'>
-            <Title title='Últimos Produtos' description={`Mostrando ${products.length < displayQuantity ? products.length : displayQuantity} de ${products.length} produtos`} href='/shop' />
+            <Title title='Últimos Produtos' description={description} href='/shop' />
             <div className='mt-12 grid grid-cols-2 sm:flex flex-wrap gap-6 justify-between'>
-                {products.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, displayQuantity).map((product, index) => (
+                {isMounted && products.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, displayQuantity).map((product, index) => (
                     <ProductCard key={index} product={product} />
                 ))}
             </div>

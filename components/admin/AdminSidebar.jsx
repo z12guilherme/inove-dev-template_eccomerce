@@ -21,6 +21,7 @@ const AdminSidebar = () => {
         { name: 'Geral (Banners)', href: '/admin/appearance', icon: SwatchBookIcon },
         { name: 'Layout Home', href: '/admin/home-layout', icon: LayoutListIcon },
         { name: 'Visual/Tema', href: '/admin/theme', icon: SwatchBookIcon },
+        { name: 'Configurações', href: '/admin/settings', icon: SettingsIcon },
     ]
 
 

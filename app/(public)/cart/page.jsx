@@ -116,7 +116,10 @@ export default function Cart() {
 
                     <div className="w-full lg:w-[400px] flex flex-col gap-6">
                         <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
-                            <ShippingCalculator onShippingCalculated={setShippingCost} />
+                            <ShippingCalculator 
+                                onShippingCalculated={setShippingCost} 
+                                items={cartArray} 
+                            />
                         </div>
                         <OrderSummary totalPrice={totalPrice} shippingCost={shippingCost} items={cartArray} />
                     </div>

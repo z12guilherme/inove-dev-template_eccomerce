@@ -33,6 +33,10 @@ export default function AdminAddProduct() {
         mrp: "",
         price: "",
         category: "",
+        weight: "",
+        height: "",
+        width: "",
+        length: "",
     })
     const [loading, setLoading] = useState(false)
 
@@ -86,12 +90,15 @@ export default function AdminAddProduct() {
                 mrp: Number(productInfo.mrp) || 0,
                 price: Number(productInfo.price) || 0,
                 category: productInfo.category,
+                weight: Number(productInfo.weight) || 0,
+                height: Number(productInfo.height) || 0,
+                width: Number(productInfo.width) || 0,
+                length: Number(productInfo.length) || 0,
                 images: imageUrls,
                 rating: [],
                 createdAt: new Date().toISOString(),
                 hasVariants,
                 variantOptions: hasVariants ? finalVariantOptions : [],
-                // Converte para número apenas na hora de salvar
                 variants: hasVariants ? generatedVariants.map(v => ({ ...v, price: Number(v.price) || 0, mrp: Number(v.mrp) || 0 })) : []
             }
 
@@ -185,7 +192,7 @@ export default function AdminAddProduct() {
                 <textarea name="description" onChange={onChangeHandler} value={productInfo.description} placeholder="Digite a descrição detalhada" rows={5} className="w-full p-2 px-4 outline-none border border-slate-200 rounded resize-none" required />
             </label>
 
-            <div className="flex gap-5 max-sm:flex-col">
+            <div className="flex gap-5 max-sm:flex-col mb-6">
                 <label className="flex flex-col gap-2 w-full">
                     Preço Original (R$)
                     <input type="number" name="mrp" onChange={onChangeHandler} value={productInfo.mrp} placeholder="Ex: 199.90" className="w-full p-2 px-4 outline-none border border-slate-200 rounded" required />
@@ -194,6 +201,28 @@ export default function AdminAddProduct() {
                     Preço com Desconto (R$)
                     <input type="number" name="price" onChange={onChangeHandler} value={productInfo.price} placeholder="Ex: 149.90" className="w-full p-2 px-4 outline-none border border-slate-200 rounded" required />
                 </label>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl my-6">
+                <p className="font-medium text-slate-800 mb-4">Dimensões e Peso (Para Frete)</p>
+                <div className="grid grid-cols-2 gap-4">
+                    <label className="flex flex-col gap-2 text-sm">
+                        Peso (kg)
+                        <input type="number" step="0.01" name="weight" onChange={onChangeHandler} value={productInfo.weight} placeholder="Ex: 0.500" className="w-full p-2 px-4 outline-none border border-slate-200 rounded bg-white" required />
+                    </label>
+                    <label className="flex flex-col gap-2 text-sm">
+                        Altura (cm)
+                        <input type="number" name="height" onChange={onChangeHandler} value={productInfo.height} placeholder="Ex: 10" className="w-full p-2 px-4 outline-none border border-slate-200 rounded bg-white" required />
+                    </label>
+                    <label className="flex flex-col gap-2 text-sm">
+                        Largura (cm)
+                        <input type="number" name="width" onChange={onChangeHandler} value={productInfo.width} placeholder="Ex: 20" className="w-full p-2 px-4 outline-none border border-slate-200 rounded bg-white" required />
+                    </label>
+                    <label className="flex flex-col gap-2 text-sm">
+                        Comprimento (cm)
+                        <input type="number" name="length" onChange={onChangeHandler} value={productInfo.length} placeholder="Ex: 30" className="w-full p-2 px-4 outline-none border border-slate-200 rounded bg-white" required />
+                    </label>
+                </div>
             </div>
 
             <label className="flex flex-col gap-2 my-6">

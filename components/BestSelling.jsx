@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 import Title from './Title'
 import ProductCard from './ProductCard'
 import { useSelector } from 'react-redux'
@@ -7,12 +8,21 @@ const BestSelling = () => {
 
     const displayQuantity = 8
     const products = useSelector(state => state.product.list)
+    const [isMounted, setIsMounted] = React.useState(false)
+
+    React.useEffect(() => {
+        setIsMounted(true)
+    }, [])
+
+    const description = isMounted 
+        ? `Mostrando ${products.length < displayQuantity ? products.length : displayQuantity} de ${products.length} produtos`
+        : "Carregando produtos..."
 
     return (
         <div className='px-6 my-30 max-w-6xl mx-auto'>
-            <Title title='Mais Vendidos' description={`Mostrando ${products.length < displayQuantity ? products.length : displayQuantity} de ${products.length} produtos`} href='/shop' />
+            <Title title='Mais Vendidos' description={description} href='/shop' />
             <div className='mt-12  grid grid-cols-2 sm:flex flex-wrap gap-6 xl:gap-12'>
-                {products.slice().sort((a, b) => b.rating.length - a.rating.length).slice(0, displayQuantity).map((product, index) => (
+                {isMounted && products.slice().sort((a, b) => b.rating.length - a.rating.length).slice(0, displayQuantity).map((product, index) => (
                     <ProductCard key={index} product={product} />
                 ))}
             </div>

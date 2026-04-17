@@ -3,7 +3,16 @@ import { NextResponse } from 'next/server';
 export async function POST(request) {
     try {
         const body = await request.json();
-        const { cep, originZip, token, items, defaultDimensions } = body;
+        const { 
+            cep, 
+            originZip, 
+            token, 
+            items, 
+            defaultDimensions,
+            sandbox = true,
+            services = '1,2,17,3,31',
+            userAgent = 'InoveDev/1.0.0 (contato@inove-dev.com)'
+        } = body;
 
         const finalToken = token || process.env.SUPER_FRETE_API;
         const finalOriginZip = originZip || process.env.NEXT_PUBLIC_ORIGIN_CEP || '01310200';
@@ -12,36 +21,9 @@ export async function POST(request) {
             throw new Error('Parâmetros obrigatórios ausentes (cep, originZip ou token)');
         }
 
-        // 1. Calcular Peso e Dimensões Totais (Lógica Simplificada de Cubagem/Soma)
-        // Em um cenário real, você teria uma lógica complexa de empacotamento.
-        // Aqui, somamos os pesos e pegamos a maior dimensão para simular uma caixa única.
-        let totalWeight = 0;
-        let maxHeight = 0;
-        let maxWidth = 0;
-        let maxLength = 0;
-
-        if (items && items.length > 0) {
-            items.forEach(item => {
-                totalWeight += (Number(item.weight) || Number(defaultDimensions.weight)) * item.quantity;
-                maxHeight = Math.max(maxHeight, Number(item.height) || Number(defaultDimensions.height));
-                maxWidth = Math.max(maxWidth, Number(item.width) || Number(defaultDimensions.width));
-                maxLength = Math.max(maxLength, Number(item.length) || Number(defaultDimensions.length));
-            });
-        } else {
-            totalWeight = Number(defaultDimensions.weight);
-            maxHeight = Number(defaultDimensions.height);
-            maxWidth = Number(defaultDimensions.width);
-            maxLength = Number(defaultDimensions.length);
-        }
-
-        // Garantir valores mínimos exigidos por transportadoras (ex: Correios/Jadlog)
-        const finalWeight = Math.max(totalWeight, 0.3);
-        const finalHeight = Math.max(maxHeight, 2);
-        const finalWidth = Math.max(maxWidth, 11);
-        const finalLength = Math.max(maxLength, 16);
-
-        // 2. Chamada para a API da SuperFrete
-        const superFreteUrl = 'https://api.superfrete.com/api/v0/calculator';
+        const superFreteUrl = sandbox 
+            ? 'https://sandbox.superfrete.com/api/v0/calculator' 
+            : 'https://api.superfrete.com/api/v0/calculator';
         
         const payload = {
             from: {
@@ -50,22 +32,42 @@ export async function POST(request) {
             to: {
                 postal_code: cep.replace(/\D/g, '')
             },
-            package: {
-                weight: finalWeight.toFixed(2),
-                height: Math.ceil(finalHeight).toString(),
-                width: Math.ceil(finalWidth).toString(),
-                length: Math.ceil(finalLength).toString()
+            services: services,
+            options: {
+                own_hand: false,
+                receipt: false,
+                insurance_value: 0,
+                use_insurance_value: false
             }
         };
 
-        console.log('Enviando para SuperFrete:', JSON.stringify(payload, null, 2));
+        // Se houver itens, enviamos o array de produtos para que a SuperFrete calcule a caixa ideal
+        if (items && items.length > 0) {
+            payload.products = items.map(item => ({
+                quantity: item.quantity || 1,
+                weight: Number(item.weight) || Number(defaultDimensions.weight) || 0.3,
+                height: Number(item.height) || Number(defaultDimensions.height) || 2,
+                width: Number(item.width) || Number(defaultDimensions.width) || 11,
+                length: Number(item.length) || Number(defaultDimensions.length) || 16
+            }));
+        } else {
+            // Caso contrário, enviamos uma caixa com as dimensões padrão
+            payload.package = {
+                weight: (Number(defaultDimensions.weight) || 0.3).toFixed(2),
+                height: Math.ceil(Number(defaultDimensions.height) || 2).toString(),
+                width: Math.ceil(Number(defaultDimensions.width) || 11).toString(),
+                length: Math.ceil(Number(defaultDimensions.length) || 16).toString()
+            };
+        }
+
+        console.log(`Enviando para SuperFrete (${sandbox ? 'SANDBOX' : 'PROD'}):`, JSON.stringify(payload, null, 2));
 
         const response = await fetch(superFreteUrl, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${finalToken}`,
                 'Content-Type': 'application/json',
-                'User-Agent': 'InoveDev/1.0.0 (integracao@inove-dev.com)',
+                'User-Agent': userAgent,
                 'Accept': 'application/json'
             },
             body: JSON.stringify(payload)
@@ -78,24 +80,21 @@ export async function POST(request) {
 
         const data = await response.json();
 
-        // 3. Filtrar Jadlog e Loggi (ou retornar as melhores opções)
-        // Nota: O formato exato do retorno depende da versão da API. 
-        // Geralmente é uma lista de objetos com 'name', 'price', 'delivery_time'.
-        const filteredOptions = data.filter(opt => 
-            opt.name.toLowerCase().includes('jadlog') || 
-            opt.name.toLowerCase().includes('loggi')
-        );
+        // Verificar se retornou erro no corpo (algumas APIs retornam 200 com erro no JSON)
+        if (data.message && !Array.isArray(data)) {
+            throw new Error(data.message);
+        }
 
-        // Se não houver Jadlog/Loggi, retorna as 2 primeiras opções disponíveis
-        const finalOptions = filteredOptions.length > 0 ? filteredOptions : data.slice(0, 2);
-
+        // 3. Formatar resposta
+        // A API retorna um array de serviços
         return NextResponse.json({
-            options: finalOptions.map(opt => ({
+            options: data.map(opt => ({
                 name: opt.name,
                 price: opt.price.toString().replace('.', ','),
                 delivery_time: opt.delivery_time,
-                id: opt.id || opt.name
-            }))
+                id: opt.id || opt.name,
+                error: opt.error // Caso algum serviço específico tenha dado erro
+            })).filter(opt => !opt.error) // Remove opções que deram erro na transportadora
         });
 
     } catch (error) {

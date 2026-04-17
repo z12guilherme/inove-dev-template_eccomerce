@@ -42,7 +42,10 @@ export default function ShippingCalculator({ onShippingCalculated, items = [] })
                         height: settings.defaultHeight,
                         width: settings.defaultWidth,
                         length: settings.defaultLength
-                    }
+                    },
+                    sandbox: settings.superfreteSandbox,
+                    services: settings.superfreteServices,
+                    userAgent: settings.superfreteUserAgent
                 })
             })
 

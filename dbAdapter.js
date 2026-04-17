@@ -195,6 +195,9 @@ export const dbAdapter = {
             return {
                 shippingOriginZip: '01310200',
                 superfreteToken: '',
+                superfreteUserAgent: 'InoveDev/1.0.0 (contato@inove-dev.com)',
+                superfreteServices: '1,2,17,3,31',
+                superfreteSandbox: true,
                 defaultWeight: 1,
                 defaultHeight: 20,
                 defaultWidth: 20,

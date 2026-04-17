@@ -8,6 +8,9 @@ export default function StoreSettings() {
     const [settings, setSettings] = useState({
         shippingOriginZip: '',
         superfreteToken: '',
+        superfreteUserAgent: '',
+        superfreteServices: '',
+        superfreteSandbox: true,
         defaultWeight: 1,
         defaultHeight: 20,
         defaultWidth: 20,
@@ -80,7 +83,47 @@ export default function StoreSettings() {
                                 placeholder="Insira seu token da SuperFrete"
                                 className="p-2 px-4 outline-none border border-slate-200 rounded focus:border-green-500 transition-colors"
                             />
-                            <p className="text-xs text-slate-400">Você pode encontrar seu token no painel da SuperFrete em Integrações {' > '} Desenvolvedores.</p>
+                            <p className="text-xs text-slate-400 mt-1">
+                                {settings.superfreteSandbox ? (
+                                    <>Obtenha seu token de <strong>Sandbox</strong> em: <a href="https://sandbox.superfrete.com/#/integrations" target="_blank" className="text-blue-500 hover:underline">sandbox.superfrete.com</a></>
+                                ) : (
+                                    <>Obtenha seu token de <strong>Produção</strong> em: <a href="https://web.superfrete.com/#/integrations" target="_blank" className="text-blue-500 hover:underline">web.superfrete.com</a></>
+                                )}
+                            </p>
+                        </label>
+                        <div className="grid grid-cols-2 gap-4">
+                            <label className="flex flex-col gap-2">
+                                <span className="text-sm font-medium text-slate-600">Modo Sandbox</span>
+                                <select 
+                                    value={settings.superfreteSandbox} 
+                                    onChange={e => setSettings({...settings, superfreteSandbox: e.target.value === 'true'})}
+                                    className="p-2 px-4 outline-none border border-slate-200 rounded focus:border-green-500 transition-colors"
+                                >
+                                    <option value="true">Ativado (Testes)</option>
+                                    <option value="false">Desativado (Produção)</option>
+                                </select>
+                            </label>
+                            <label className="flex flex-col gap-2">
+                                <span className="text-sm font-medium text-slate-600">Serviços (IDs)</span>
+                                <input 
+                                    type="text"
+                                    value={settings.superfreteServices}
+                                    onChange={e => setSettings({...settings, superfreteServices: e.target.value})}
+                                    placeholder="1,2,17,3,31"
+                                    className="p-2 px-4 outline-none border border-slate-200 rounded focus:border-green-500 transition-colors"
+                                />
+                            </label>
+                        </div>
+                        <label className="flex flex-col gap-2">
+                            <span className="text-sm font-medium text-slate-600">User-Agent (Email p/ Contato Técnico)</span>
+                            <input 
+                                type="text"
+                                value={settings.superfreteUserAgent}
+                                onChange={e => setSettings({...settings, superfreteUserAgent: e.target.value})}
+                                placeholder="exemplo@email.com"
+                                className="p-2 px-4 outline-none border border-slate-200 rounded focus:border-green-500 transition-colors"
+                            />
+                            <p className="text-xs text-slate-400">Recomendado pela SuperFrete para identificação da sua aplicação.</p>
                         </label>
                     </div>
                 </div>

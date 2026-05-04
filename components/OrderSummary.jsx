@@ -92,7 +92,7 @@ const OrderSummary = ({ totalPrice, shippingCost = 0, items }) => {
             order_location_region: ipData?.region || null,
             order_location_country: ipData?.country || null,
             order_location_is_vpn: ipData?.is_vpn || false,
-            order_items: items.map(item => ({
+            orderItems: items.map(item => ({
                 productId: item.id,
                 quantity: item.quantity,
                 price: item.price,

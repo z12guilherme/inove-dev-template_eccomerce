@@ -5,15 +5,21 @@ import Image from 'next/image'
 import React, { useState, useEffect } from 'react'
 import CategoriesMarquee from './CategoriesMarquee'
 import { getAppearance, defaultAppearance } from '@/lib/appearanceStore'
+import { getStoredTheme, defaultTheme } from '@/lib/themeProvider'
 
 const Hero = () => {
     const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || 'R$'
     const [content, setContent] = useState(defaultAppearance)
+    const [theme, setTheme] = useState(defaultTheme)
 
     useEffect(() => {
         setContent(getAppearance())
+        setTheme(getStoredTheme())
 
-        const handleStorage = () => setContent(getAppearance())
+        const handleStorage = () => {
+            setContent(getAppearance())
+            setTheme(getStoredTheme())
+        }
         window.addEventListener('storage', handleStorage)
         return () => window.removeEventListener('storage', handleStorage)
     }, [])
@@ -23,12 +29,12 @@ const Hero = () => {
             <div className='flex max-xl:flex-col gap-8 max-w-7xl mx-auto my-10'>
 
                 {/* Card principal do Hero */}
-                <div className='relative flex-1 flex flex-col bg-green-200 rounded-3xl xl:min-h-100 group'>
+                <div className='relative flex-1 flex flex-col rounded-3xl xl:min-h-100 group' style={{ backgroundColor: theme.primaryLight }}>
                     <div className='p-5 sm:p-16'>
 
                         {/* Badge de novidade */}
-                        <div className='inline-flex items-center gap-3 bg-green-300 text-green-600 pr-4 p-1 rounded-full text-xs sm:text-sm'>
-                            <span className='bg-green-600 px-3 py-1 max-sm:ml-1 rounded-full text-white text-xs'>
+                        <div className='inline-flex items-center gap-3 pr-4 p-1 rounded-full text-xs sm:text-sm' style={{ backgroundColor: theme.primaryMid, color: theme.primaryDark }}>
+                            <span className='px-3 py-1 max-sm:ml-1 rounded-full text-white text-xs' style={{ backgroundColor: theme.primary }}>
                                 {content.heroBadgeLabel}
                             </span>
                             {content.heroBadgeText}
@@ -36,18 +42,18 @@ const Hero = () => {
                         </div>
 
                         {/* Headline */}
-                        <h2 className='text-3xl sm:text-5xl leading-[1.2] my-3 font-medium bg-gradient-to-r from-slate-600 to-[#A0FF74] bg-clip-text text-transparent max-w-xs sm:max-w-md'>
+                        <h2 className='text-3xl sm:text-5xl leading-[1.2] my-3 font-medium max-w-xs sm:max-w-md' style={{ color: theme.primaryDark }}>
                             {content.heroHeadline}
                         </h2>
 
                         {/* Preço de entrada */}
-                        <div className='text-slate-800 text-sm font-medium mt-4 sm:mt-8'>
+                        <div className='text-sm font-medium mt-4 sm:mt-8' style={{ color: theme.primaryDark }}>
                             <p>A partir de</p>
                             <p className='text-3xl'>{currency}{content.heroStartingPrice}</p>
                         </div>
 
                         {/* CTA */}
-                        <button className='bg-slate-800 text-white text-sm py-2.5 px-7 sm:py-5 sm:px-12 mt-4 sm:mt-10 rounded-md hover:bg-slate-900 hover:scale-103 active:scale-95 transition'>
+                        <button className='text-white text-sm py-2.5 px-7 sm:py-5 sm:px-12 mt-4 sm:mt-10 rounded-md hover:scale-103 active:scale-95 transition' style={{ backgroundColor: theme.accent }}>
                             {content.heroButtonText}
                         </button>
                     </div>
@@ -62,22 +68,22 @@ const Hero = () => {
 
                 {/* Cards secundários */}
                 <div className='flex flex-col md:flex-row xl:flex-col gap-5 w-full xl:max-w-sm text-sm text-slate-600'>
-                    <div className='flex-1 flex items-center justify-between w-full bg-orange-200 rounded-3xl p-6 px-8 group'>
+                    <div className='flex-1 flex items-center justify-between w-full rounded-3xl p-6 px-8 group' style={{ backgroundColor: theme.card2Bg || '#fed7aa' }}>
                         <div>
-                            <p className='text-3xl font-medium bg-gradient-to-r from-slate-800 to-[#FFAD51] bg-clip-text text-transparent max-w-40'>
+                            <p className='text-3xl font-medium bg-clip-text text-transparent max-w-40' style={{ backgroundImage: `linear-gradient(to right, #1e293b, ${theme.card2Text || '#FFAD51'})` }}>
                                 {content.heroCardTitle1}
                             </p>
-                            <p className='flex items-center gap-1 mt-4'>Ver mais <ArrowRightIcon className='group-hover:ml-2 transition-all' size={18} /></p>
+                            <p className='flex items-center gap-1 mt-4'>{content.heroCardLink1 || 'Ver mais'} <ArrowRightIcon className='group-hover:ml-2 transition-all' size={18} /></p>
                         </div>
                         <Image className='w-35' src={assets.hero_product_img1} alt="" />
                     </div>
 
-                    <div className='flex-1 flex items-center justify-between w-full bg-blue-200 rounded-3xl p-6 px-8 group'>
+                    <div className='flex-1 flex items-center justify-between w-full rounded-3xl p-6 px-8 group' style={{ backgroundColor: theme.card3Bg || '#bfdbfe' }}>
                         <div>
-                            <p className='text-3xl font-medium bg-gradient-to-r from-slate-800 to-[#78B2FF] bg-clip-text text-transparent max-w-40'>
+                            <p className='text-3xl font-medium bg-clip-text text-transparent max-w-40' style={{ backgroundImage: `linear-gradient(to right, #1e293b, ${theme.card3Text || '#78B2FF'})` }}>
                                 {content.heroCardTitle2}
                             </p>
-                            <p className='flex items-center gap-1 mt-4'>Ver mais <ArrowRightIcon className='group-hover:ml-2 transition-all' size={18} /></p>
+                            <p className='flex items-center gap-1 mt-4'>{content.heroCardLink2 || 'Ver mais'} <ArrowRightIcon className='group-hover:ml-2 transition-all' size={18} /></p>
                         </div>
                         <Image className='w-35' src={assets.hero_product_img2} alt="" />
                     </div>

@@ -32,11 +32,15 @@ const PRESETS = [
 ]
 
 const FIELDS = [
-    { key: 'primary',      label: 'Cor Principal',          hint: 'Botões, links e destaques principais' },
-    { key: 'primaryLight', label: 'Cor Principal (Clara)',   hint: 'Fundos suaves e cards de destaque' },
-    { key: 'primaryMid',   label: 'Cor Principal (Média)',   hint: 'Badges e elementos intermediários' },
-    { key: 'primaryDark',  label: 'Cor Principal (Escura)',  hint: 'Hover e estados ativos' },
-    { key: 'accent',       label: 'Cor de Destaque (Texto)', hint: 'Títulos e botões escuros' },
+    { key: 'primary', label: 'Cor Principal', hint: 'Botões, links e destaques principais' },
+    { key: 'primaryLight', label: 'Cor Principal (Clara)', hint: 'Fundos suaves e cards de destaque' },
+    { key: 'primaryMid', label: 'Cor Principal (Média)', hint: 'Badges e elementos intermediários' },
+    { key: 'primaryDark', label: 'Cor Principal (Escura)', hint: 'Hover e estados ativos' },
+    { key: 'accent', label: 'Cor de Destaque (Texto)', hint: 'Títulos e botões escuros' },
+    { key: 'card2Bg', label: 'Fundo Banner 2', hint: 'Fundo do card secundário' },
+    { key: 'card2Text', label: 'Texto Banner 2', hint: 'Cor final do gradiente no texto' },
+    { key: 'card3Bg', label: 'Fundo Banner 3', hint: 'Fundo do card terciário' },
+    { key: 'card3Text', label: 'Texto Banner 3', hint: 'Cor final do gradiente no texto' },
 ]
 
 export default function ThemeSettings() {
@@ -55,8 +59,9 @@ export default function ThemeSettings() {
     }
 
     const handlePreset = (preset) => {
-        setTheme(preset.colors)
-        applyTheme(preset.colors) // preview ao vivo
+        const next = { ...theme, ...preset.colors }
+        setTheme(next)
+        applyTheme(next) // preview ao vivo
         toast(`Paleta "${preset.name}" aplicada como prévia — clique em Salvar para confirmar.`, { icon: '🎨' })
     }
 
@@ -120,39 +125,42 @@ export default function ThemeSettings() {
             <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6 mb-6">
                 <h2 className="text-slate-700 font-medium mb-5 text-sm uppercase tracking-wider">Personalizar Cores</h2>
                 <div className="space-y-5">
-                    {FIELDS.map(({ key, label, hint }) => (
-                        <div key={key} className="flex items-center gap-4">
-                            <div className="relative shrink-0">
+                    {FIELDS.map(({ key, label, hint }) => {
+                        const val = theme[key] || ({ card2Bg: '#fed7aa', card2Text: '#ffad51', card3Bg: '#bfdbfe', card3Text: '#78b2ff' })[key] || '#000000';
+                        return (
+                            <div key={key} className="flex items-center gap-4">
+                                <div className="relative shrink-0">
+                                    <input
+                                        type="color"
+                                        id={`color-${key}`}
+                                        value={val}
+                                        onChange={e => handleChange(key, e.target.value)}
+                                        className="w-12 h-12 rounded-xl border border-slate-200 cursor-pointer p-0.5 bg-white"
+                                    />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <label htmlFor={`color-${key}`} className="block text-sm font-medium text-slate-700 mb-0.5 cursor-pointer">{label}</label>
+                                    <p className="text-xs text-slate-400">{hint}</p>
+                                </div>
                                 <input
-                                    type="color"
-                                    id={`color-${key}`}
-                                    value={theme[key]}
-                                    onChange={e => handleChange(key, e.target.value)}
-                                    className="w-12 h-12 rounded-xl border border-slate-200 cursor-pointer p-0.5 bg-white"
+                                    type="text"
+                                    value={val}
+                                    onChange={e => {
+                                        if (/^#[0-9a-fA-F]{0,6}$/.test(e.target.value)) handleChange(key, e.target.value)
+                                    }}
+                                    maxLength={7}
+                                    className="w-24 p-2 border border-slate-200 rounded-lg text-xs font-mono outline-none focus:border-green-500 transition text-center"
                                 />
                             </div>
-                            <div className="flex-1 min-w-0">
-                                <label htmlFor={`color-${key}`} className="block text-sm font-medium text-slate-700 mb-0.5 cursor-pointer">{label}</label>
-                                <p className="text-xs text-slate-400">{hint}</p>
-                            </div>
-                            <input
-                                type="text"
-                                value={theme[key]}
-                                onChange={e => {
-                                    if (/^#[0-9a-fA-F]{0,6}$/.test(e.target.value)) handleChange(key, e.target.value)
-                                }}
-                                maxLength={7}
-                                className="w-24 p-2 border border-slate-200 rounded-lg text-xs font-mono outline-none focus:border-green-500 transition text-center"
-                            />
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
 
             {/* Tipografia e Formato */}
             <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6 mb-6">
                 <h2 className="text-slate-700 font-medium mb-5 text-sm uppercase tracking-wider">Tipografia & Geometria</h2>
-                
+
                 {/* Fonte Principal */}
                 <div className="mb-6">
                     <label className="block text-sm font-medium text-slate-700 mb-2">Família de Fonte</label>

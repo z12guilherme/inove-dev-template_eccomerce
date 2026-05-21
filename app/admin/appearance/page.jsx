@@ -13,18 +13,18 @@ import { getStoredTheme, applyTheme, defaultTheme } from '@/lib/themeProvider'
 
 // ── Paletas predefinidas (migrado do admin/theme) ─────────────────────────────
 const PALETTES = [
-    { name: 'Verde Esmeralda',  primary: '#16a34a', primaryLight: '#bbf7d0', primaryMid: '#86efac', primaryDark: '#15803d', accent: '#1e293b' },
-    { name: 'Azul Oceano',      primary: '#2563eb', primaryLight: '#dbeafe', primaryMid: '#93c5fd', primaryDark: '#1d4ed8', accent: '#0f172a' },
-    { name: 'Roxo Profundo',    primary: '#7c3aed', primaryLight: '#ede9fe', primaryMid: '#c4b5fd', primaryDark: '#6d28d9', accent: '#1e1b4b' },
-    { name: 'Rosa Vibrante',    primary: '#db2777', primaryLight: '#fce7f3', primaryMid: '#f9a8d4', primaryDark: '#be185d', accent: '#1e293b' },
-    { name: 'Laranja',          primary: '#ea580c', primaryLight: '#ffedd5', primaryMid: '#fdba74', primaryDark: '#c2410c', accent: '#1c1917' },
-    { name: 'Teal Moderno',     primary: '#0d9488', primaryLight: '#ccfbf1', primaryMid: '#5eead4', primaryDark: '#0f766e', accent: '#134e4a' },
+    { name: 'Verde Esmeralda', primary: '#16a34a', primaryLight: '#bbf7d0', primaryMid: '#86efac', primaryDark: '#15803d', accent: '#1e293b' },
+    { name: 'Azul Oceano', primary: '#2563eb', primaryLight: '#dbeafe', primaryMid: '#93c5fd', primaryDark: '#1d4ed8', accent: '#0f172a' },
+    { name: 'Roxo Profundo', primary: '#7c3aed', primaryLight: '#ede9fe', primaryMid: '#c4b5fd', primaryDark: '#6d28d9', accent: '#1e1b4b' },
+    { name: 'Rosa Vibrante', primary: '#db2777', primaryLight: '#fce7f3', primaryMid: '#f9a8d4', primaryDark: '#be185d', accent: '#1e293b' },
+    { name: 'Laranja', primary: '#ea580c', primaryLight: '#ffedd5', primaryMid: '#fdba74', primaryDark: '#c2410c', accent: '#1c1917' },
+    { name: 'Teal Moderno', primary: '#0d9488', primaryLight: '#ccfbf1', primaryMid: '#5eead4', primaryDark: '#0f766e', accent: '#134e4a' },
 ]
 
 const TABS = [
-    { id: 'hero',   label: 'Hero',       icon: LayoutIcon },
-    { id: 'cores',  label: 'Cores',      icon: PaletteIcon },
-    { id: 'fonte',  label: 'Tipografia', icon: TypeIcon },
+    { id: 'hero', label: 'Hero', icon: LayoutIcon },
+    { id: 'cores', label: 'Cores', icon: PaletteIcon },
+    { id: 'fonte', label: 'Tipografia', icon: TypeIcon },
 ]
 
 // ── Preview ao vivo do Hero ───────────────────────────────────────────────────
@@ -78,10 +78,12 @@ function HeroPreview({ appearance, theme }) {
                 {/* cards preview */}
                 <div className="mt-4 flex gap-2">
                     <div className="flex-1 rounded-xl p-3 bg-orange-200 text-[10px] font-semibold text-orange-900">
-                        {appearance.heroCardTitle1}
+                        <p>{appearance.heroCardTitle1}</p>
+                        <p className="text-[8px] mt-2 opacity-80 flex items-center">{appearance.heroCardLink1 || 'Ver mais'} <ChevronRightIcon size={8} /></p>
                     </div>
                     <div className="flex-1 rounded-xl p-3 bg-blue-200 text-[10px] font-semibold text-blue-900">
-                        {appearance.heroCardTitle2}
+                        <p>{appearance.heroCardTitle2}</p>
+                        <p className="text-[8px] mt-2 opacity-80 flex items-center">{appearance.heroCardLink2 || 'Ver mais'} <ChevronRightIcon size={8} /></p>
                     </div>
                 </div>
             </div>
@@ -252,18 +254,37 @@ export default function AppearancePage() {
                                 </Section>
 
                                 <Section title="Cards secundários">
-                                    <Field label="Card 1 (laranja)">
+                                    <Field label="Título do Card 1">
                                         <input
                                             value={appearance.heroCardTitle1}
                                             onChange={e => updateAppearance('heroCardTitle1', e.target.value)}
                                             className="input-field"
                                         />
                                     </Field>
-                                    <Field label="Card 2 (azul)">
+                                    <Field label="Texto do Link 1">
+                                        <input
+                                            value={appearance.heroCardLink1 || ''}
+                                            onChange={e => updateAppearance('heroCardLink1', e.target.value)}
+                                            className="input-field"
+                                            placeholder="Ver mais"
+                                        />
+                                    </Field>
+
+                                    <hr className="border-slate-100 my-1" />
+
+                                    <Field label="Título do Card 2">
                                         <input
                                             value={appearance.heroCardTitle2}
                                             onChange={e => updateAppearance('heroCardTitle2', e.target.value)}
                                             className="input-field"
+                                        />
+                                    </Field>
+                                    <Field label="Texto do Link 2">
+                                        <input
+                                            value={appearance.heroCardLink2 || ''}
+                                            onChange={e => updateAppearance('heroCardLink2', e.target.value)}
+                                            className="input-field"
+                                            placeholder="Ver mais"
                                         />
                                     </Field>
                                 </Section>
@@ -297,11 +318,11 @@ export default function AppearancePage() {
 
                                 <Section title="Cores individuais">
                                     {[
-                                        { key: 'primary',      label: 'Cor principal' },
+                                        { key: 'primary', label: 'Cor principal' },
                                         { key: 'primaryLight', label: 'Tom claro' },
-                                        { key: 'primaryMid',   label: 'Tom médio' },
-                                        { key: 'primaryDark',  label: 'Tom escuro' },
-                                        { key: 'accent',       label: 'Cor de contraste (botões)' },
+                                        { key: 'primaryMid', label: 'Tom médio' },
+                                        { key: 'primaryDark', label: 'Tom escuro' },
+                                        { key: 'accent', label: 'Cor de contraste (botões)' },
                                     ].map(({ key, label }) => (
                                         <Field key={key} label={label}>
                                             <div className="flex items-center gap-2">

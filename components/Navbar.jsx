@@ -6,22 +6,35 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Image from "next/image";
 import CartDrawer from "./CartDrawer";
+import { getAppearance, defaultAppearance } from "@/lib/appearanceStore";
 
 const Navbar = () => {
 
     const router = useRouter();
 
     const [search, setSearch] = useState('')
-    const [settings, setSettings] = useState({ storeName: 'INOVE-DEV', logo: null })
+    const [storeName, setStoreName] = useState(defaultAppearance.storeName)
+    const [logo, setLogo] = useState(null)
     const cartCount = useSelector(state => state.cart.total)
     const [isCartOpen, setIsCartOpen] = useState(false)
 
     useEffect(() => {
-        const stored = localStorage.getItem('inove_settings')
-        if (stored) {
-            setSettings(JSON.parse(stored))
+        const load = () => {
+            const appearance = getAppearance()
+            setStoreName(appearance.storeName || defaultAppearance.storeName)
+
+            // Logo ainda vem de inove_settings por compatibilidade
+            const stored = localStorage.getItem('inove_settings')
+            if (stored) {
+                const parsed = JSON.parse(stored)
+                setLogo(parsed.logo || null)
+            }
         }
+        load()
+        window.addEventListener('storage', load)
+        return () => window.removeEventListener('storage', load)
     }, [])
+
 
     const handleSearch = (e) => {
         e.preventDefault()
@@ -34,12 +47,12 @@ const Navbar = () => {
                 <div className="flex items-center justify-between max-w-7xl mx-auto py-4  transition-all">
 
                     <Link href="/" className="relative flex items-center gap-2 text-3xl sm:text-4xl font-semibold text-slate-700">
-                        {settings.logo ? (
-                            <Image src={settings.logo} alt={settings.storeName} width={150} height={40} className="h-10 w-auto object-contain" />
+                        {logo ? (
+                            <Image src={logo} alt={storeName} width={150} height={40} className="h-10 w-auto object-contain" />
                         ) : (
-                            <span className="tracking-tight">{settings.storeName}</span>
+                            <span className="tracking-tight">{storeName}</span>
                         )}
-                        <p className="absolute text-xs font-semibold -top-1 -right-8 px-3 p-0.5 rounded-full flex items-center gap-2 text-white bg-green-500">
+                        <p className="absolute text-xs font-semibold -top-1 -right-8 px-3 p-0.5 rounded-full flex items-center gap-2 text-white bg-brand">
                             plus
                         </p>
                     </Link>

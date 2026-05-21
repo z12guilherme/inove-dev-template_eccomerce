@@ -1,17 +1,17 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import toast from 'react-hot-toast'
 import {
     PaletteIcon, TypeIcon, LayoutIcon, CheckIcon, RotateCcwIcon, SaveIcon,
-    ChevronRightIcon, MonitorIcon
+    ChevronRightIcon, MonitorIcon, LayoutGridIcon, UploadIcon, XIcon, StoreIcon
 } from 'lucide-react'
 import {
     getAppearance, saveAppearance, defaultAppearance,
-    AVAILABLE_FONTS, applyFont
+    AVAILABLE_FONTS, applyFont, applyPreset
 } from '@/lib/appearanceStore'
 import { getStoredTheme, applyTheme, defaultTheme } from '@/lib/themeProvider'
+import { BUSINESS_PRESETS } from '@/lib/businessPresets'
 
-// ── Paletas predefinidas (migrado do admin/theme) ─────────────────────────────
 const PALETTES = [
     { name: 'Verde Esmeralda', primary: '#16a34a', primaryLight: '#bbf7d0', primaryMid: '#86efac', primaryDark: '#15803d', accent: '#1e293b' },
     { name: 'Azul Oceano', primary: '#2563eb', primaryLight: '#dbeafe', primaryMid: '#93c5fd', primaryDark: '#1d4ed8', accent: '#0f172a' },
@@ -22,12 +22,21 @@ const PALETTES = [
 ]
 
 const TABS = [
+<<<<<<< HEAD
     { id: 'hero', label: 'Hero', icon: LayoutIcon },
     { id: 'cores', label: 'Cores', icon: PaletteIcon },
     { id: 'fonte', label: 'Tipografia', icon: TypeIcon },
+=======
+    { id: 'modelo',  label: 'Modelo',     icon: LayoutGridIcon },
+    { id: 'loja',    label: 'Loja',       icon: StoreIcon },
+    { id: 'hero',    label: 'Hero',       icon: LayoutIcon },
+    { id: 'imagens', label: 'Imagens',    icon: UploadIcon },
+    { id: 'cores',   label: 'Cores',      icon: PaletteIcon },
+    { id: 'fonte',   label: 'Tipografia', icon: TypeIcon },
+>>>>>>> 9ac4293b5f04c3f0d36855030fe94f53feebe516
 ]
 
-// ── Preview ao vivo do Hero ───────────────────────────────────────────────────
+// ── Preview ao vivo ───────────────────────────────────────────────────────────
 function HeroPreview({ appearance, theme }) {
     return (
         <div className="w-full rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
@@ -40,43 +49,25 @@ function HeroPreview({ appearance, theme }) {
                 </div>
                 <span className="text-xs text-slate-400 ml-1">Preview — Página Inicial</span>
             </div>
-
-            {/* mini hero */}
-            <div
-                className="p-6 relative"
-                style={{ backgroundColor: theme.primaryLight, fontFamily: `'${appearance.fontFamily}', sans-serif` }}
-            >
-                {/* badge */}
+            <div className="p-6 relative" style={{ backgroundColor: theme.primaryLight, fontFamily: `'${appearance.fontFamily}', sans-serif` }}>
                 <div className="inline-flex items-center gap-2 pr-3 p-0.5 rounded-full text-[10px] mb-3"
                     style={{ backgroundColor: theme.primaryMid, color: theme.primaryDark }}>
-                    <span className="px-2 py-0.5 rounded-full text-white text-[10px]"
-                        style={{ backgroundColor: theme.primary }}>
+                    <span className="px-2 py-0.5 rounded-full text-white text-[10px]" style={{ backgroundColor: theme.primary }}>
                         {appearance.heroBadgeLabel || 'NOVIDADE'}
                     </span>
                     {appearance.heroBadgeText}
                     <ChevronRightIcon size={10} />
                 </div>
-
-                {/* headline */}
-                <h3 className="font-semibold leading-tight mb-3 max-w-[260px] text-sm"
-                    style={{ color: theme.primaryDark }}>
+                <h3 className="font-semibold leading-tight mb-3 max-w-[260px] text-sm" style={{ color: theme.primaryDark }}>
                     {appearance.heroHeadline}
                 </h3>
-
-                {/* price */}
                 <p className="text-[10px] text-slate-500">A partir de</p>
-                <p className="font-bold text-lg" style={{ color: theme.primaryDark }}>
-                    R${appearance.heroStartingPrice}
-                </p>
-
-                {/* button */}
-                <button className="mt-3 text-[11px] px-4 py-2 rounded-md text-white font-medium transition"
-                    style={{ backgroundColor: theme.accent }}>
+                <p className="font-bold text-lg" style={{ color: theme.primaryDark }}>R${appearance.heroStartingPrice}</p>
+                <button className="mt-3 text-[11px] px-4 py-2 rounded-md text-white font-medium" style={{ backgroundColor: theme.accent }}>
                     {appearance.heroButtonText}
                 </button>
-
-                {/* cards preview */}
                 <div className="mt-4 flex gap-2">
+<<<<<<< HEAD
                     <div className="flex-1 rounded-xl p-3 bg-orange-200 text-[10px] font-semibold text-orange-900">
                         <p>{appearance.heroCardTitle1}</p>
                         <p className="text-[8px] mt-2 opacity-80 flex items-center">{appearance.heroCardLink1 || 'Ver mais'} <ChevronRightIcon size={8} /></p>
@@ -85,36 +76,86 @@ function HeroPreview({ appearance, theme }) {
                         <p>{appearance.heroCardTitle2}</p>
                         <p className="text-[8px] mt-2 opacity-80 flex items-center">{appearance.heroCardLink2 || 'Ver mais'} <ChevronRightIcon size={8} /></p>
                     </div>
+=======
+                    <div className="flex-1 rounded-xl p-3 bg-orange-200 text-[10px] font-semibold text-orange-900 truncate">{appearance.heroCardTitle1}</div>
+                    <div className="flex-1 rounded-xl p-3 bg-blue-200 text-[10px] font-semibold text-blue-900 truncate">{appearance.heroCardTitle2}</div>
+>>>>>>> 9ac4293b5f04c3f0d36855030fe94f53feebe516
                 </div>
             </div>
-
-            {/* paleta de bolinha */}
             <div className="bg-white px-4 py-3 flex items-center gap-2 border-t border-slate-100">
                 <span className="text-xs text-slate-400">Paleta:</span>
                 {[theme.primary, theme.primaryMid, theme.primaryLight, theme.accent].map((c, i) => (
                     <div key={i} className="w-5 h-5 rounded-full border border-white shadow-sm ring-1 ring-slate-200" style={{ backgroundColor: c }} />
                 ))}
                 <span className="ml-auto text-xs text-slate-400" style={{ fontFamily: `'${appearance.fontFamily}', sans-serif` }}>
-                    Fonte: {appearance.fontFamily}
+                    {appearance.fontFamily}
                 </span>
             </div>
         </div>
     )
 }
 
+// ── Upload de imagem → base64 ─────────────────────────────────────────────────
+function ImageUploader({ label, value, onChange, hint }) {
+    const inputRef = useRef()
+
+    const handleFile = (e) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+        if (file.size > 2 * 1024 * 1024) {
+            toast.error('Imagem muito grande! Use até 2 MB.')
+            return
+        }
+        const reader = new FileReader()
+        reader.onload = (ev) => onChange(ev.target.result)
+        reader.readAsDataURL(file)
+    }
+
+    return (
+        <div>
+            <p className="text-xs text-slate-500 mb-1.5">{label}</p>
+            {value ? (
+                <div className="relative group rounded-xl overflow-hidden border border-slate-200">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={value} alt={label} className="w-full h-32 object-cover" />
+                    <button
+                        onClick={() => onChange(null)}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+                    >
+                        <XIcon size={12} />
+                    </button>
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/40 text-white text-[10px] text-center py-1">
+                        Hover para remover
+                    </div>
+                </div>
+            ) : (
+                <button
+                    onClick={() => inputRef.current?.click()}
+                    className="w-full h-24 border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center gap-1.5 text-slate-400 hover:border-slate-400 hover:text-slate-500 transition"
+                >
+                    <UploadIcon size={18} />
+                    <span className="text-xs">Clique para enviar</span>
+                </button>
+            )}
+            {hint && <p className="text-[10px] text-slate-400 mt-1">{hint}</p>}
+            <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+        </div>
+    )
+}
+
 // ── Página principal ──────────────────────────────────────────────────────────
 export default function AppearancePage() {
-    const [activeTab, setActiveTab] = useState('hero')
+    const [activeTab, setActiveTab] = useState('modelo')
     const [appearance, setAppearance] = useState(defaultAppearance)
     const [theme, setTheme] = useState(defaultTheme)
     const [hasChanges, setHasChanges] = useState(false)
+    const [activePresetId, setActivePresetId] = useState(null)
 
     useEffect(() => {
         setAppearance(getAppearance())
         setTheme(getStoredTheme())
     }, [])
 
-    // atualiza preview ao vivo
     const updateAppearance = useCallback((key, value) => {
         setAppearance(prev => ({ ...prev, [key]: value }))
         setHasChanges(true)
@@ -123,13 +164,23 @@ export default function AppearancePage() {
     const updateTheme = useCallback((updates) => {
         const next = { ...theme, ...updates }
         setTheme(next)
-        applyTheme(next)     // preview ao vivo nos CSS vars
+        applyTheme(next)
         setHasChanges(true)
     }, [theme])
 
     const handleFontPreview = (fontName) => {
         updateAppearance('fontFamily', fontName)
         applyFont(fontName)
+    }
+
+    const handleApplyPreset = (preset) => {
+        if (!window.confirm(`Aplicar o modelo "${preset.label}"?\nIsso substituirá as cores e textos atuais.`)) return
+        const { appearance: newApp, theme: newTheme } = applyPreset(preset)
+        setAppearance(newApp)
+        setTheme(newTheme)
+        setActivePresetId(preset.id)
+        setHasChanges(false)
+        toast.success(`Modelo "${preset.label}" aplicado com sucesso! ✨`)
     }
 
     const handleSave = () => {
@@ -143,6 +194,7 @@ export default function AppearancePage() {
         setTheme(defaultTheme)
         applyTheme(defaultTheme)
         applyFont(defaultAppearance.fontFamily)
+        setActivePresetId(null)
         setHasChanges(true)
         toast('Configurações restauradas para o padrão.', { icon: 'ℹ️' })
     }
@@ -158,10 +210,7 @@ export default function AppearancePage() {
                     <p className="text-sm text-slate-400 mt-1">Personalize o visual da sua loja em tempo real</p>
                 </div>
                 <div className="flex gap-2">
-                    <button
-                        onClick={handleReset}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 text-sm transition"
-                    >
+                    <button onClick={handleReset} className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 text-sm transition">
                         <RotateCcwIcon size={14} /> Restaurar
                     </button>
                     <button
@@ -175,22 +224,20 @@ export default function AppearancePage() {
                 </div>
             </div>
 
-            {/* Layout: editor + preview */}
             <div className="flex gap-6 items-start">
-
                 {/* ─ Painel Esquerdo: Editor ─ */}
                 <div className="w-full max-w-sm shrink-0 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                     {/* Tabs */}
-                    <div className="flex border-b border-slate-100">
+                    <div className="flex border-b border-slate-100 overflow-x-auto no-scrollbar">
                         {TABS.map(tab => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex-1 flex flex-col items-center gap-1 py-3 text-xs font-medium transition-all ${activeTab === tab.id
+                                className={`flex-1 min-w-fit flex flex-col items-center gap-1 py-3 px-2 text-[10px] font-medium transition-all ${activeTab === tab.id
                                     ? 'text-green-600 border-b-2 border-green-500 bg-green-50/50'
                                     : 'text-slate-400 hover:text-slate-600'}`}
                             >
-                                <tab.icon size={16} />
+                                <tab.icon size={15} />
                                 {tab.label}
                             </button>
                         ))}
@@ -198,62 +245,100 @@ export default function AppearancePage() {
 
                     <div className="p-5 flex flex-col gap-5 max-h-[700px] overflow-y-auto">
 
-                        {/* ── TAB: HERO ────────────────────────────────── */}
+                        {/* ── TAB: MODELO ──────────────────────────────────── */}
+                        {activeTab === 'modelo' && (
+                            <>
+                                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-700 flex gap-2">
+                                    <span className="shrink-0">⚠️</span>
+                                    <span>Aplicar um modelo substituirá suas cores e textos atuais. Uma confirmação será solicitada.</span>
+                                </div>
+                                <div className="flex flex-col gap-3">
+                                    {BUSINESS_PRESETS.map(preset => (
+                                        <div
+                                            key={preset.id}
+                                            className={`relative p-4 rounded-xl border transition-all cursor-pointer group ${activePresetId === preset.id
+                                                ? 'border-green-500 bg-green-50 shadow-sm'
+                                                : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'}`}
+                                            onClick={() => handleApplyPreset(preset)}
+                                        >
+                                            <div className="flex items-start justify-between gap-3">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-2xl">{preset.emoji}</span>
+                                                    <div>
+                                                        <p className="text-sm font-semibold text-slate-700">{preset.label}</p>
+                                                        <p className="text-[10px] text-slate-400 mt-0.5">{preset.description}</p>
+                                                    </div>
+                                                </div>
+                                                {activePresetId === preset.id && <CheckIcon size={16} className="text-green-500 shrink-0 mt-0.5" />}
+                                            </div>
+                                            <div className="flex gap-1.5 mt-3">
+                                                {[preset.theme.primary, preset.theme.primaryMid, preset.theme.primaryLight, preset.theme.accent].map((c, i) => (
+                                                    <div key={i} className="w-5 h-5 rounded-full ring-1 ring-black/10" style={{ backgroundColor: c }} />
+                                                ))}
+                                                <span className="ml-auto text-[10px] text-slate-400 group-hover:text-green-600 transition">
+                                                    Clique para aplicar →
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        )}
+
+                        {/* ── TAB: LOJA ────────────────────────────────────── */}
+                        {activeTab === 'loja' && (
+                            <>
+                                <Section title="Identidade da loja">
+                                    <Field label="Nome da loja">
+                                        <input
+                                            value={appearance.storeName || ''}
+                                            onChange={e => updateAppearance('storeName', e.target.value)}
+                                            className="input-field"
+                                            placeholder="Ex: Minha Loja"
+                                        />
+                                    </Field>
+                                    <Field label="Slogan / Subtítulo">
+                                        <input
+                                            value={appearance.storeSlogan || ''}
+                                            onChange={e => updateAppearance('storeSlogan', e.target.value)}
+                                            className="input-field"
+                                            placeholder="Ex: Qualidade que você pode confiar."
+                                        />
+                                    </Field>
+                                </Section>
+                                <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-600 flex gap-2">
+                                    <span>ℹ️</span>
+                                    <span>O nome da loja aparece na barra de navegação. Salve para aplicar.</span>
+                                </div>
+                            </>
+                        )}
+
+                        {/* ── TAB: HERO ────────────────────────────────────── */}
                         {activeTab === 'hero' && (
                             <>
                                 <Section title="Badge de destaque">
                                     <Field label="Rótulo (ex: NOVIDADE)">
-                                        <input
-                                            value={appearance.heroBadgeLabel}
-                                            onChange={e => updateAppearance('heroBadgeLabel', e.target.value)}
-                                            className="input-field"
-                                            placeholder="NOVIDADE"
-                                        />
+                                        <input value={appearance.heroBadgeLabel} onChange={e => updateAppearance('heroBadgeLabel', e.target.value)} className="input-field" placeholder="NOVIDADE" />
                                     </Field>
                                     <Field label="Texto do badge">
-                                        <input
-                                            value={appearance.heroBadgeText}
-                                            onChange={e => updateAppearance('heroBadgeText', e.target.value)}
-                                            className="input-field"
-                                            placeholder="Frete Grátis em Pedidos..."
-                                        />
+                                        <input value={appearance.heroBadgeText} onChange={e => updateAppearance('heroBadgeText', e.target.value)} className="input-field" placeholder="Frete Grátis em Pedidos..." />
                                     </Field>
                                 </Section>
-
                                 <Section title="Headline principal">
-                                    <textarea
-                                        value={appearance.heroHeadline}
-                                        onChange={e => updateAppearance('heroHeadline', e.target.value)}
-                                        rows={3}
-                                        className="input-field resize-none"
-                                        placeholder="Seu headline aqui..."
-                                    />
+                                    <textarea value={appearance.heroHeadline} onChange={e => updateAppearance('heroHeadline', e.target.value)} rows={3} className="input-field resize-none" placeholder="Seu headline aqui..." />
                                 </Section>
-
                                 <Section title="Preço de entrada">
                                     <Field label="A partir de (R$)">
-                                        <input
-                                            type="number"
-                                            value={appearance.heroStartingPrice}
-                                            onChange={e => updateAppearance('heroStartingPrice', e.target.value)}
-                                            className="input-field"
-                                            step="0.01"
-                                        />
+                                        <input type="number" value={appearance.heroStartingPrice} onChange={e => updateAppearance('heroStartingPrice', e.target.value)} className="input-field" step="0.01" />
                                     </Field>
                                 </Section>
-
                                 <Section title="Botão CTA">
                                     <Field label="Texto do botão">
-                                        <input
-                                            value={appearance.heroButtonText}
-                                            onChange={e => updateAppearance('heroButtonText', e.target.value)}
-                                            className="input-field"
-                                            placeholder="SAIBA MAIS"
-                                        />
+                                        <input value={appearance.heroButtonText} onChange={e => updateAppearance('heroButtonText', e.target.value)} className="input-field" placeholder="SAIBA MAIS" />
                                     </Field>
                                 </Section>
-
                                 <Section title="Cards secundários">
+<<<<<<< HEAD
                                     <Field label="Título do Card 1">
                                         <input
                                             value={appearance.heroCardTitle1}
@@ -278,6 +363,13 @@ export default function AppearancePage() {
                                             onChange={e => updateAppearance('heroCardTitle2', e.target.value)}
                                             className="input-field"
                                         />
+=======
+                                    <Field label="Card 1 (laranja)">
+                                        <input value={appearance.heroCardTitle1} onChange={e => updateAppearance('heroCardTitle1', e.target.value)} className="input-field" />
+                                    </Field>
+                                    <Field label="Card 2 (azul)">
+                                        <input value={appearance.heroCardTitle2} onChange={e => updateAppearance('heroCardTitle2', e.target.value)} className="input-field" />
+>>>>>>> 9ac4293b5f04c3f0d36855030fe94f53feebe516
                                     </Field>
                                     <Field label="Texto do Link 2">
                                         <input
@@ -291,7 +383,39 @@ export default function AppearancePage() {
                             </>
                         )}
 
-                        {/* ── TAB: CORES ───────────────────────────────── */}
+                        {/* ── TAB: IMAGENS ─────────────────────────────────── */}
+                        {activeTab === 'imagens' && (
+                            <>
+                                <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-500 flex gap-2">
+                                    <span>📷</span>
+                                    <span>Faça upload das imagens do Hero. Máx 2 MB por imagem. Use "Remover" para voltar à imagem padrão.</span>
+                                </div>
+                                <Section title="Imagem principal do Hero">
+                                    <ImageUploader
+                                        label="Imagem principal (modelo/produto em destaque)"
+                                        value={appearance.heroImage}
+                                        onChange={v => updateAppearance('heroImage', v)}
+                                        hint="Recomendado: 600×700px, fundo transparente ou branco."
+                                    />
+                                </Section>
+                                <Section title="Imagens dos cards">
+                                    <ImageUploader
+                                        label="Card 1 (laranja)"
+                                        value={appearance.heroCard1Image}
+                                        onChange={v => updateAppearance('heroCard1Image', v)}
+                                        hint="Recomendado: 300×300px."
+                                    />
+                                    <ImageUploader
+                                        label="Card 2 (azul)"
+                                        value={appearance.heroCard2Image}
+                                        onChange={v => updateAppearance('heroCard2Image', v)}
+                                        hint="Recomendado: 300×300px."
+                                    />
+                                </Section>
+                            </>
+                        )}
+
+                        {/* ── TAB: CORES ───────────────────────────────────── */}
                         {activeTab === 'cores' && (
                             <>
                                 <Section title="Paletas predefinidas">
@@ -315,7 +439,6 @@ export default function AppearancePage() {
                                         ))}
                                     </div>
                                 </Section>
-
                                 <Section title="Cores individuais">
                                     {[
                                         { key: 'primary', label: 'Cor principal' },
@@ -326,22 +449,10 @@ export default function AppearancePage() {
                                     ].map(({ key, label }) => (
                                         <Field key={key} label={label}>
                                             <div className="flex items-center gap-2">
-                                                <input
-                                                    type="color"
-                                                    value={theme[key]}
-                                                    onChange={e => updateTheme({ [key]: e.target.value })}
-                                                    className="w-9 h-9 rounded-lg cursor-pointer border border-slate-200 p-0.5 bg-white"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    value={theme[key]}
-                                                    onChange={e => {
-                                                        if (/^#[0-9a-fA-F]{0,6}$/.test(e.target.value))
-                                                            updateTheme({ [key]: e.target.value })
-                                                    }}
-                                                    className="input-field font-mono text-xs flex-1"
-                                                    maxLength={7}
-                                                />
+                                                <input type="color" value={theme[key]} onChange={e => updateTheme({ [key]: e.target.value })} className="w-9 h-9 rounded-lg cursor-pointer border border-slate-200 p-0.5 bg-white" />
+                                                <input type="text" value={theme[key]}
+                                                    onChange={e => { if (/^#[0-9a-fA-F]{0,6}$/.test(e.target.value)) updateTheme({ [key]: e.target.value }) }}
+                                                    className="input-field font-mono text-xs flex-1" maxLength={7} />
                                             </div>
                                         </Field>
                                     ))}
@@ -349,35 +460,25 @@ export default function AppearancePage() {
                             </>
                         )}
 
-                        {/* ── TAB: TIPOGRAFIA ──────────────────────────── */}
+                        {/* ── TAB: TIPOGRAFIA ──────────────────────────────── */}
                         {activeTab === 'fonte' && (
                             <Section title="Escolha a fonte da loja">
                                 <div className="flex flex-col gap-2">
                                     {AVAILABLE_FONTS.map(font => (
-                                        <button
-                                            key={font.name}
-                                            onClick={() => handleFontPreview(font.name)}
+                                        <button key={font.name} onClick={() => handleFontPreview(font.name)}
                                             className={`flex items-center justify-between p-3.5 rounded-xl border text-left transition-all ${appearance.fontFamily === font.name
                                                 ? 'border-green-500 bg-green-50 shadow-sm'
                                                 : 'border-slate-200 hover:border-slate-300'}`}
                                         >
                                             <div>
-                                                <p className="font-semibold text-slate-800 text-sm" style={{ fontFamily: `'${font.name}', sans-serif` }}>
-                                                    {font.label}
-                                                </p>
-                                                <p className="text-xs text-slate-400 mt-0.5" style={{ fontFamily: `'${font.name}', sans-serif` }}>
-                                                    {font.sample}
-                                                </p>
+                                                <p className="font-semibold text-slate-800 text-sm" style={{ fontFamily: `'${font.name}', sans-serif` }}>{font.label}</p>
+                                                <p className="text-xs text-slate-400 mt-0.5" style={{ fontFamily: `'${font.name}', sans-serif` }}>{font.sample}</p>
                                             </div>
-                                            {appearance.fontFamily === font.name && (
-                                                <CheckIcon size={16} className="text-green-500 shrink-0" />
-                                            )}
+                                            {appearance.fontFamily === font.name && <CheckIcon size={16} className="text-green-500 shrink-0" />}
                                         </button>
                                     ))}
                                 </div>
-                                <p className="text-xs text-slate-400 text-center mt-2">
-                                    A fonte é aplicada em toda a loja ao salvar.
-                                </p>
+                                <p className="text-xs text-slate-400 text-center mt-2">A fonte é aplicada em toda a loja ao salvar.</p>
                             </Section>
                         )}
                     </div>
@@ -386,7 +487,6 @@ export default function AppearancePage() {
                 {/* ─ Painel Direito: Preview ─ */}
                 <div className="flex-1 flex flex-col gap-4 sticky top-6">
                     <HeroPreview appearance={appearance} theme={theme} />
-
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-700 flex items-start gap-2">
                         <span className="text-amber-500 text-base leading-none mt-0.5">💡</span>
                         <div>
@@ -400,7 +500,6 @@ export default function AppearancePage() {
     )
 }
 
-// ── Componentes auxiliares ────────────────────────────────────────────────────
 function Section({ title, children }) {
     return (
         <div>

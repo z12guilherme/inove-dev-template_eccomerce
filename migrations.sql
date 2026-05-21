@@ -179,7 +179,7 @@ ALTER TABLE public.footer_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.theme_settings  ENABLE ROW LEVEL SECURITY;
 
 -- ========================================================================================
--- EXEMPLOS DE POLÍTICAS RLS (adaptar conforme a autenticação usada)
+-- POLÍTICAS DE RLS (Supabase)
 -- ========================================================================================
 
 -- Produtos: leitura pública, escrita apenas para admin
@@ -191,18 +191,39 @@ CREATE POLICY "Admin gerencia produtos" ON public.products
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
   );
 
--- Pedidos: usuário vê apenas os próprios; admin vê todos
+-- Pedidos: usuário gerencia seus próprios; admin vê todos
 CREATE POLICY "Usuário vê seus pedidos" ON public.orders
   FOR SELECT USING (user_id = auth.uid());
+
+CREATE POLICY "Usuário cria seus pedidos" ON public.orders
+  FOR INSERT WITH CHECK (user_id = auth.uid() OR auth.uid() IS NULL); -- Permite compras anônimas
 
 CREATE POLICY "Admin vê todos os pedidos" ON public.orders
   FOR ALL USING (
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
   );
 
+-- Itens de Pedido: acompanham a permissão do pedido (Order)
+CREATE POLICY "Usuário vê itens do seu pedido" ON public.order_items
+  FOR SELECT USING (
+    EXISTS (SELECT 1 FROM public.orders WHERE orders.id = order_items.order_id AND orders.user_id = auth.uid())
+  );
+
+CREATE POLICY "Usuário insere itens em seu pedido" ON public.order_items
+  FOR INSERT WITH CHECK (true);
+
 -- Endereços: usuário gerencia apenas os próprios
 CREATE POLICY "Usuário gerencia seus endereços" ON public.addresses
   FOR ALL USING (user_id = auth.uid());
+
+-- Cupons: Leitura pública (para validar no checkout), escrita só Admin
+CREATE POLICY "Cupons visíveis para leitura pública" ON public.coupons
+  FOR SELECT USING (is_active = true);
+
+CREATE POLICY "Admin gerencia cupons" ON public.coupons
+  FOR ALL USING (
+    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
+  );
 
 -- Avaliações: leitura pública, escrita autenticada
 CREATE POLICY "Avaliações visíveis para todos" ON public.reviews
@@ -211,20 +232,66 @@ CREATE POLICY "Avaliações visíveis para todos" ON public.reviews
 CREATE POLICY "Usuário autenticado cria avaliação" ON public.reviews
   FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
 
+CREATE POLICY "Usuário edita sua avaliação" ON public.reviews
+  FOR UPDATE USING (user_id = auth.uid());
+
+CREATE POLICY "Usuário deleta sua avaliação" ON public.reviews
+  FOR DELETE USING (user_id = auth.uid());
+
+-- Configurações de rodapé e tema: leitura pública, somente admin edita
+CREATE POLICY "Leitura pública do rodapé" ON public.footer_settings
+  FOR SELECT USING (true);
+
 -- Configurações de rodapé e tema: somente admin
 CREATE POLICY "Admin gerencia rodapé" ON public.footer_settings
   FOR ALL USING (
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
   );
 
+CREATE POLICY "Leitura pública do tema" ON public.theme_settings
+  FOR SELECT USING (true);
+
 CREATE POLICY "Admin gerencia tema" ON public.theme_settings
   FOR ALL USING (
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
   );
 
--- Leitura pública de rodapé e tema (necessária para o front-end exibir sem autenticação)
-CREATE POLICY "Leitura pública do rodapé" ON public.footer_settings
-  FOR SELECT USING (true);
+-- ========================================================================================
+-- FUNÇÕES E TRIGGERS (Automated workflows para Supabase)
+-- ========================================================================================
 
-CREATE POLICY "Leitura pública do tema" ON public.theme_settings
-  FOR SELECT USING (true);
+-- Atualização automática da coluna updated_at
+CREATE OR REPLACE FUNCTION public.handle_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = timezone('utc', now());
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_products_updated_at BEFORE UPDATE ON public.products FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+CREATE TRIGGER set_reviews_updated_at BEFORE UPDATE ON public.reviews FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+CREATE TRIGGER set_orders_updated_at BEFORE UPDATE ON public.orders FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+CREATE TRIGGER set_footer_settings_updated_at BEFORE UPDATE ON public.footer_settings FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+CREATE TRIGGER set_theme_settings_updated_at BEFORE UPDATE ON public.theme_settings FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+
+-- Sincronização automática de Profiles ao criar usuário no Supabase Auth
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, name, email, role)
+  VALUES (
+    new.id,
+    COALESCE(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name', 'Usuário'),
+    new.email,
+    'customer'
+  );
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger atrelado a tabela interna de autenticação do Supabase
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();

@@ -154,15 +154,23 @@ INSERT INTO public.footer_settings DEFAULT VALUES;
 -- ========================================================================================
 CREATE TABLE public.theme_settings (
   id            UUID  DEFAULT uuid_generate_v4() PRIMARY KEY,
-  primary_color       TEXT DEFAULT '#16a34a',
-  primary_light_color TEXT DEFAULT '#bbf7d0',
-  primary_mid_color   TEXT DEFAULT '#86efac',
-  primary_dark_color  TEXT DEFAULT '#15803d',
-  accent_color        TEXT DEFAULT '#1e293b',
+  theme         JSONB DEFAULT '{}', -- Guarda todo o objeto do tema (cores, tipografia, bordas)
   updated_at    TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc', now()) NOT NULL
 );
 -- Garante que só exista uma linha de tema por loja
 INSERT INTO public.theme_settings DEFAULT VALUES;
+
+-- ========================================================================================
+-- 10. TABELA DE CONFIGURAÇÕES DE APARÊNCIA (Hero, Imagens e Textos da Loja)
+--    Armazenada como JSONB para alinhar perfeitamente com o appearanceStore.js
+-- ========================================================================================
+CREATE TABLE public.appearance_settings (
+  id            UUID  DEFAULT uuid_generate_v4() PRIMARY KEY,
+  appearance    JSONB DEFAULT '{}', -- Guarda os dados do Hero, vitrines, badges e configs
+  updated_at    TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc', now()) NOT NULL
+);
+-- Garante que só exista uma linha por loja
+INSERT INTO public.appearance_settings DEFAULT VALUES;
 
 -- ========================================================================================
 -- SEGURANÇA — ROW LEVEL SECURITY (RLS)
@@ -177,6 +185,7 @@ ALTER TABLE public.orders         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.order_items    ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.footer_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.theme_settings  ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.appearance_settings ENABLE ROW LEVEL SECURITY;
 
 -- ========================================================================================
 -- POLÍTICAS DE RLS (Supabase)
@@ -256,6 +265,15 @@ CREATE POLICY "Admin gerencia tema" ON public.theme_settings
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
   );
 
+-- Configurações de aparência: leitura pública, somente admin edita
+CREATE POLICY "Leitura pública da aparência" ON public.appearance_settings
+  FOR SELECT USING (true);
+
+CREATE POLICY "Admin gerencia aparência" ON public.appearance_settings
+  FOR ALL USING (
+    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
+  );
+
 -- ========================================================================================
 -- FUNÇÕES E TRIGGERS (Automated workflows para Supabase)
 -- ========================================================================================
@@ -274,6 +292,7 @@ CREATE TRIGGER set_reviews_updated_at BEFORE UPDATE ON public.reviews FOR EACH R
 CREATE TRIGGER set_orders_updated_at BEFORE UPDATE ON public.orders FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 CREATE TRIGGER set_footer_settings_updated_at BEFORE UPDATE ON public.footer_settings FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 CREATE TRIGGER set_theme_settings_updated_at BEFORE UPDATE ON public.theme_settings FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+CREATE TRIGGER set_appearance_settings_updated_at BEFORE UPDATE ON public.appearance_settings FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 
 -- Sincronização automática de Profiles ao criar usuário no Supabase Auth
 CREATE OR REPLACE FUNCTION public.handle_new_user()

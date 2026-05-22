@@ -22,18 +22,15 @@ const PALETTES = [
 ]
 
 const TABS = [
-<<<<<<< HEAD
     { id: 'hero', label: 'Hero', icon: LayoutIcon },
     { id: 'cores', label: 'Cores', icon: PaletteIcon },
     { id: 'fonte', label: 'Tipografia', icon: TypeIcon },
-=======
-    { id: 'modelo',  label: 'Modelo',     icon: LayoutGridIcon },
-    { id: 'loja',    label: 'Loja',       icon: StoreIcon },
-    { id: 'hero',    label: 'Hero',       icon: LayoutIcon },
-    { id: 'imagens', label: 'Imagens',    icon: UploadIcon },
-    { id: 'cores',   label: 'Cores',      icon: PaletteIcon },
-    { id: 'fonte',   label: 'Tipografia', icon: TypeIcon },
->>>>>>> 9ac4293b5f04c3f0d36855030fe94f53feebe516
+    { id: 'modelo', label: 'Modelo', icon: LayoutGridIcon },
+    { id: 'loja', label: 'Loja', icon: StoreIcon },
+    { id: 'hero', label: 'Hero', icon: LayoutIcon },
+    { id: 'imagens', label: 'Imagens', icon: UploadIcon },
+    { id: 'cores', label: 'Cores', icon: PaletteIcon },
+    { id: 'fonte', label: 'Tipografia', icon: TypeIcon },
 ]
 
 // ── Preview ao vivo ───────────────────────────────────────────────────────────
@@ -67,7 +64,6 @@ function HeroPreview({ appearance, theme }) {
                     {appearance.heroButtonText}
                 </button>
                 <div className="mt-4 flex gap-2">
-<<<<<<< HEAD
                     <div className="flex-1 rounded-xl p-3 bg-orange-200 text-[10px] font-semibold text-orange-900">
                         <p>{appearance.heroCardTitle1}</p>
                         <p className="text-[8px] mt-2 opacity-80 flex items-center">{appearance.heroCardLink1 || 'Ver mais'} <ChevronRightIcon size={8} /></p>
@@ -76,10 +72,8 @@ function HeroPreview({ appearance, theme }) {
                         <p>{appearance.heroCardTitle2}</p>
                         <p className="text-[8px] mt-2 opacity-80 flex items-center">{appearance.heroCardLink2 || 'Ver mais'} <ChevronRightIcon size={8} /></p>
                     </div>
-=======
                     <div className="flex-1 rounded-xl p-3 bg-orange-200 text-[10px] font-semibold text-orange-900 truncate">{appearance.heroCardTitle1}</div>
                     <div className="flex-1 rounded-xl p-3 bg-blue-200 text-[10px] font-semibold text-blue-900 truncate">{appearance.heroCardTitle2}</div>
->>>>>>> 9ac4293b5f04c3f0d36855030fe94f53feebe516
                 </div>
             </div>
             <div className="bg-white px-4 py-3 flex items-center gap-2 border-t border-slate-100">
@@ -338,7 +332,6 @@ export default function AppearancePage() {
                                     </Field>
                                 </Section>
                                 <Section title="Cards secundários">
-<<<<<<< HEAD
                                     <Field label="Título do Card 1">
                                         <input
                                             value={appearance.heroCardTitle1}
@@ -363,13 +356,6 @@ export default function AppearancePage() {
                                             onChange={e => updateAppearance('heroCardTitle2', e.target.value)}
                                             className="input-field"
                                         />
-=======
-                                    <Field label="Card 1 (laranja)">
-                                        <input value={appearance.heroCardTitle1} onChange={e => updateAppearance('heroCardTitle1', e.target.value)} className="input-field" />
-                                    </Field>
-                                    <Field label="Card 2 (azul)">
-                                        <input value={appearance.heroCardTitle2} onChange={e => updateAppearance('heroCardTitle2', e.target.value)} className="input-field" />
->>>>>>> 9ac4293b5f04c3f0d36855030fe94f53feebe516
                                     </Field>
                                     <Field label="Texto do Link 2">
                                         <input
